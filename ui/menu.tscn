@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgamdwpujbn1q"]
+
+[ext_resource type="Script" path="res://ui/menu.gd" id="1_kntqf"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kntqf")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 436.0
+offset_top = 223.0
+offset_right = -436.0
+offset_bottom = -223.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Menu
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerName" type="LineEdit" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Enter Player Name Here"
+alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Enter address to join here"
+alignment = 1
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="focus_exited" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
+[connection signal="text_changed" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_text_changed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_join_button_pressed"]
