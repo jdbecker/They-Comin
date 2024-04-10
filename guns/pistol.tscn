@@ -6,5 +6,9 @@
 [node name="Pistol" instance=ExtResource("1_tw7lq")]
 script = ExtResource("2_cu3ke")
 
+[node name="Pistol-rigid" parent="." index="0" groups=["guns"]]
+collision_layer = 4
+continuous_cd = true
+
 [node name="Pistol-rigid" parent="Pistol-rigid" index="0"]
 layers = 4

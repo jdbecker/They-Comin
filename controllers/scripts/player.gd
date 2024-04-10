@@ -10,6 +10,8 @@ extends CharacterBody3D
 
 @onready var camera: Camera3D = $Camera3D as Camera3D
 @onready var label: Label3D = $Label3D as Label3D
+@onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D
+@onready var hand_slot: Node3D = $Camera3D/HandSlot
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -57,6 +59,9 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
+	
+	if event.is_action_pressed("interact"):
+		interact()
 		
 func _update_camera(delta: float) -> void:
 	
@@ -120,3 +125,15 @@ func respawn() -> void:
 	position.y = 3
 	position.x = randf_range(-8, 8)
 	position.z = randf_range(-8, 8)
+
+
+func interact() -> void:
+	if hand_slot.get_child_count() >= 1:
+		pass # drop?
+	else:
+		var object := reach_raycast.get_collider()
+		if object and object.is_in_group("guns"):
+			var gun := object.duplicate() as RigidBody3D
+			gun.freeze = true
+			gun.transform = Transform3D.IDENTITY
+			hand_slot.add_child(gun)

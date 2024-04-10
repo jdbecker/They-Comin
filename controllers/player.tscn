@@ -38,7 +38,16 @@ mesh = SubResource("CapsuleMesh_6tv51")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="TextureRect" type="TextureRect" parent="Camera3D"]
+[node name="UI" type="Control" parent="Camera3D"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Camera3D/UI"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -50,12 +59,16 @@ texture = ExtResource("3_b6wk7")
 stretch_mode = 5
 
 [node name="ReachRayCast3D" type="RayCast3D" parent="Camera3D"]
-target_position = Vector3(0, 0, 3)
+target_position = Vector3(0, 0, -3)
 collision_mask = 4
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 visible = false
 update_mode = 1
+
+[node name="HandSlot" type="Node3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418099, -0.251107, -0.469765)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_v1kmn")

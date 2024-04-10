@@ -8,11 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/pistol.tscn" id="6_2sxxu"]
 [ext_resource type="PackedScene" uid="uid://bgamdwpujbn1q" path="res://ui/menu.tscn" id="7_8gxd5"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dsp7r"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w2oay"]
 albedo_texture = ExtResource("3_duo1u")
 uv1_triplanar = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u6et3"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sd83s"]
 albedo_texture = ExtResource("4_4ltpw")
 uv1_triplanar = true
 
@@ -24,13 +24,16 @@ script = ExtResource("1_uhsmk")
 [node name="Environment" parent="." instance=ExtResource("2_vg5a5")]
 
 [node name="Plane" parent="Environment" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_dsp7r")
-surface_material_override/1 = SubResource("StandardMaterial3D_u6et3")
+surface_material_override/0 = SubResource("StandardMaterial3D_w2oay")
+surface_material_override/1 = SubResource("StandardMaterial3D_sd83s")
+
+[node name="StaticBody3D" parent="Environment/Plane" index="0"]
+collision_priority = 9.22337e+18
 
 [node name="Menu" parent="." instance=ExtResource("7_8gxd5")]
 
 [node name="Pistol" parent="." instance=ExtResource("6_2sxxu")]
-transform = Transform3D(0.0259152, 6.37783e-11, -0.999664, 0.992874, 0.116359, 0.0257392, 0.11632, -0.993207, 0.00301545, -0.023241, 0.0540177, -7.99857)
+transform = Transform3D(0.0259152, 6.37783e-11, -0.999664, 0.992874, 0.116359, 0.0257392, 0.11632, -0.993207, 0.00301545, -0.023241, 1.2991, -7.99857)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://controllers/player.tscn")
