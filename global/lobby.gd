@@ -45,14 +45,19 @@ func _on_connected_ok() -> void:
 
 
 func _on_player_connected(id: int) -> void:
-	player_connected.emit(id)
 	_register_player.rpc_id(id, Global.data.player_name)
+	player_connected.emit(id)
 
 
 @rpc("any_peer", "reliable")
 func _register_player(new_player_name: String) -> void:
 	var new_player_id := multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_name
+
+
+@rpc("call_local", "reliable")
+func get_player_name() -> String:
+	return Global.data.player_name
 
 
 func _on_player_disconnected(id: int) -> void:

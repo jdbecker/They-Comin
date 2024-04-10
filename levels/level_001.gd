@@ -14,14 +14,17 @@ const PLAYER = preload("res://controllers/player.tscn")
 
 
 func _ready() -> void:
+	randomize()
+	
+	Lobby.server_disconnected.connect(server_disconnected)
+
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
-	Lobby.server_disconnected.connect(server_disconnected)
 
 
 func add_player(id: int) -> void:
-	var player := PLAYER.instantiate()
+	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
 	add_child(player)
 
