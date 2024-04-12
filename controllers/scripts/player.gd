@@ -119,19 +119,17 @@ func _physics_process(delta: float) -> void:
 
 
 func respawn() -> void:
-	velocity.x = 0
-	velocity.y = 0
-	velocity.z = 0
-	position.y = 3
-	position.x = randf_range(-8, 8)
-	position.z = randf_range(-8, 8)
+	velocity = Vector3.ZERO
+	_mouse_rotation = Vector3.ZERO
+	var spawn: SpawnArea = get_tree().get_nodes_in_group("player_spawn").front() as SpawnArea
+	position = spawn.get_random_position()
 
 
 func interact() -> void:
 	if hand_slot.get_child_count() >= 1:
 		pass # drop?
 	else:
-		var object := reach_raycast.get_collider()
+		var object := reach_raycast.get_collider() as Node
 		if object and object.is_in_group("guns"):
 			var gun := object.duplicate() as RigidBody3D
 			gun.freeze = true
