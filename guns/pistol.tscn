@@ -8,7 +8,13 @@ script = ExtResource("2_cu3ke")
 
 [node name="Pistol-rigid" parent="." index="0" groups=["guns"]]
 collision_layer = 4
+freeze = true
 continuous_cd = true
 
 [node name="Pistol-rigid" parent="Pistol-rigid" index="0"]
 layers = 4
+
+[node name="RayCast3D" type="RayCast3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0682097, 0)
+target_position = Vector3(0, 0, -100)
+collision_mask = 8

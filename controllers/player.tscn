@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3ffql15mo0aj"]
+[gd_scene load_steps=8 format=3 uid="uid://c3ffql15mo0aj"]
 
 [ext_resource type="Script" path="res://controllers/scripts/player.gd" id="1_um36a"]
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://materials/player.tres" id="2_gldw4"]
 [ext_resource type="Texture2D" uid="uid://bkpb2s6yis3v7" path="res://addons/kenney_particle_pack/circle_05.png" id="3_b6wk7"]
+[ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/pistol.tscn" id="4_oynjx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6tj1"]
 
@@ -45,6 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="TextureRect" type="TextureRect" parent="Camera3D/UI"]
 layout_mode = 1
@@ -54,7 +56,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.03, 0.03)
-pivot_offset = Vector2(576, 324)
+pivot_offset = Vector2(960, 540)
 texture = ExtResource("3_b6wk7")
 stretch_mode = 5
 
@@ -69,6 +71,8 @@ update_mode = 1
 
 [node name="HandSlot" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418099, -0.251107, -0.469765)
+
+[node name="Pistol" parent="Camera3D/HandSlot" instance=ExtResource("4_oynjx")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_v1kmn")

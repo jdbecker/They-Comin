@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 @export var player_name: String = "Player Name"
 @export var SPEED : float = 5.0
-@export var SPRINT_MULTI : float = 3.0
+@export var SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
 @export var JUMP_VELOCITY : float = 4.5
 @export var MOUSE_SENSITIVITY : float = 0.5
@@ -49,6 +49,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
+	
 	if _mouse_input:
 		var mouse_motion := event as InputEventMouseMotion
 		_rotation_input = -mouse_motion.relative.x * MOUSE_SENSITIVITY
@@ -62,6 +63,9 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("interact"):
 		interact()
+	
+	if event.is_action_pressed("trigger"):
+		trigger()
 		
 func _update_camera(delta: float) -> void:
 	
@@ -121,8 +125,14 @@ func _physics_process(delta: float) -> void:
 func respawn() -> void:
 	velocity = Vector3.ZERO
 	_mouse_rotation = Vector3.ZERO
-	var spawn: SpawnArea = get_tree().get_nodes_in_group("player_spawn").front() as SpawnArea
-	position = spawn.get_random_position()
+	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
+	while empty_spawn_areas.is_empty():
+		print("waiting for room to spawn...")
+		await get_tree().create_timer(3).timeout
+		empty_spawn_areas = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
+	empty_spawn_areas.shuffle()
+	var spawn_area: SpawnArea = empty_spawn_areas.front() as SpawnArea
+	position = spawn_area.collision_shape_3d.global_position
 
 
 func interact() -> void:
@@ -135,3 +145,12 @@ func interact() -> void:
 			gun.freeze = true
 			gun.transform = Transform3D.IDENTITY
 			hand_slot.add_child(gun)
+
+
+func trigger() -> void:
+	if hand_slot.get_child_count() <= 0:
+		print("Nothing in hand to trigger!")
+	else:
+		print("pulling the trigger")
+		var gun: Gun = hand_slot.get_children().front() as Gun
+		gun.trigger()

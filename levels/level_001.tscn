@@ -1,13 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://b1yleqbb8tc7x"]
+[gd_scene load_steps=11 format=3 uid="uid://b1yleqbb8tc7x"]
 
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" path="res://levels/level_001.gd" id="1_uhsmk"]
 [ext_resource type="PackedScene" uid="uid://1davoxem8gya" path="res://blend_files/Environment.blend" id="2_vg5a5"]
 [ext_resource type="Texture2D" uid="uid://1405507wvtiy" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="3_duo1u"]
 [ext_resource type="Texture2D" uid="uid://bndmfxhrngnai" path="res://addons/kenney_prototype_textures/dark/texture_13.png" id="4_4ltpw"]
-[ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/pistol.tscn" id="6_2sxxu"]
 [ext_resource type="PackedScene" uid="uid://bgamdwpujbn1q" path="res://ui/menu.tscn" id="7_8gxd5"]
-[ext_resource type="Script" path="res://levels/spawn_area.gd" id="8_2kgyg"]
+[ext_resource type="PackedScene" uid="uid://bqds1ychuwsaf" path="res://levels/spawn_area.tscn" id="8_1irng"]
+[ext_resource type="PackedScene" uid="uid://ekmf0tgrvv0r" path="res://enemies/enemy.tscn" id="8_40mqq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w2oay"]
 cull_mode = 2
@@ -18,9 +18,6 @@ uv1_triplanar = true
 cull_mode = 2
 albedo_texture = ExtResource("4_4ltpw")
 uv1_triplanar = true
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_dx6cp"]
-size = Vector3(8, 4, 8)
 
 [node name="Level_001" type="Node3D"]
 script = ExtResource("1_uhsmk")
@@ -38,21 +35,60 @@ collision_priority = 9.22337e+18
 
 [node name="Menu" parent="." instance=ExtResource("7_8gxd5")]
 
-[node name="Pistol" parent="." instance=ExtResource("6_2sxxu")]
-transform = Transform3D(0.0259152, 6.37783e-11, -0.999664, 0.992874, 0.116359, 0.0257392, 0.11632, -0.993207, 0.00301545, -0.023241, 1.2991, -7.99857)
-
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://controllers/player.tscn")
 spawn_path = NodePath("..")
 
-[node name="SpawnArea" type="Area3D" parent="." groups=["player_spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 56, 8)
-collision_layer = 0
-collision_mask = 0
-script = ExtResource("8_2kgyg")
+[node name="PlayerSpawners" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_dx6cp")
+[node name="PlayerSpawnArea1" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 33, 11)
+
+[node name="PlayerSpawnArea2" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 33, 7)
+
+[node name="PlayerSpawnArea3" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 33, 11)
+
+[node name="PlayerSpawnArea4" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 33, 7)
+
+[node name="PlayerSpawnArea5" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 33, 11)
+
+[node name="PlayerSpawnArea6" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 33, 7)
+
+[node name="EnemySpawners" type="Node3D" parent="."]
+
+[node name="EnemySpawnArea1" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, -48)
+
+[node name="EnemySpawnArea2" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, -36)
+
+[node name="EnemySpawnArea3" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, -24)
+
+[node name="EnemySpawnArea4" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, -12)
+
+[node name="EnemySpawnArea5" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 0)
+
+[node name="EnemySpawnArea6" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 12)
+
+[node name="EnemySpawnArea7" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 24)
+
+[node name="EnemySpawnArea8" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 36)
+
+[node name="EnemySpawnArea9" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 48)
+
+[node name="Enemy" parent="." instance=ExtResource("8_40mqq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [editable path="Environment"]
