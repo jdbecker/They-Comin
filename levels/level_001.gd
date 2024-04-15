@@ -1,6 +1,7 @@
 extends Node3D
 
 const PLAYER = preload("res://controllers/player.tscn")
+const ENEMY = preload("res://enemies/enemy.tscn")
 
 @onready var menu: Menu = $Menu as Menu
 #@onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
@@ -21,6 +22,10 @@ func _ready() -> void:
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
+
+
+func _physics_process(delta: float) -> void:
+	get_tree().call_group("enemy", "approach_closest_player", get_tree().get_nodes_in_group("players"))
 
 
 func add_player(id: int) -> void:
@@ -44,3 +49,13 @@ func server_disconnected() -> void:
 	
 	for player: Player in get_tree().get_nodes_in_group("players"):
 		player.queue_free()
+
+
+func _on_enemy_destroyed() -> void:
+	var enemy := ENEMY.instantiate() as Enemy
+	enemy.destroyed.connect(_on_enemy_destroyed)
+	var enemy_spawn_areas := get_tree().get_nodes_in_group("enemy_spawn")
+	enemy_spawn_areas.shuffle()
+	var spawn_area = enemy_spawn_areas.front() as SpawnArea
+	enemy.position = spawn_area.collision_shape_3d.global_position
+	add_child(enemy)
