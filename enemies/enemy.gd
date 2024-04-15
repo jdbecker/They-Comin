@@ -17,8 +17,11 @@ func _physics_process(delta: float) -> void:
 	velocity.z = new_velocity.z * SPEED
 	
 	# Add the gravity.
-	if position.y > 1:
+	if position.y > 0:
 		velocity.y -= gravity * delta
+	
+	if position.y < 0:
+		position.y = lerp(position.y, 0.0, 0.5)
 	
 	move_and_slide()
 

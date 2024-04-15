@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
 @export var JUMP_VELOCITY : float = 4.5
-@export var MOUSE_SENSITIVITY : float = 0.5
+@export var MOUSE_SENSITIVITY : float = 0.4
 
 @onready var camera: Camera3D = $Camera3D as Camera3D
 @onready var label: Label3D = $Label3D as Label3D
