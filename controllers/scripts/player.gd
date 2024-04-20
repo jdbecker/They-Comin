@@ -12,6 +12,7 @@ extends CharacterBody3D
 @onready var label: Label3D = $Label3D as Label3D
 @onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D
 @onready var hand_slot: Node3D = $Camera3D/HandSlot
+@onready var pause_menu: Control = $Camera3D/PauseMenu
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -60,7 +61,7 @@ func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if event.is_action_pressed("exit"):
-		get_tree().quit()
+		menu()
 	
 	if event.is_action_pressed("interact"):
 		interact()
@@ -157,3 +158,17 @@ func trigger() -> void:
 		print("pulling the trigger")
 		var gun: Gun = hand_slot.get_children().front() as Gun
 		gun.trigger()
+
+
+func menu() -> void:
+	if not is_multiplayer_authority(): return
+	if pause_menu.visible:
+		pause_menu.hide()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
+		pause_menu.show()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
+func _on_quit_button_pressed() -> void:
+	get_tree().quit()

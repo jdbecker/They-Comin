@@ -85,3 +85,8 @@ replication_config = SubResource("SceneReplicationConfig_v1kmn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 billboard = 1
 text = "blablabla"
+
+[connection signal="pressed" from="Camera3D/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/ResumeButton" to="." method="menu"]
+[connection signal="pressed" from="Camera3D/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+
+[editable path="Camera3D/PauseMenu"]
