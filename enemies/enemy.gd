@@ -40,7 +40,7 @@ func distance_to(target: Node3D) -> float:
 	return global_transform.origin.distance_to(target.global_transform.origin)
 
 
-@rpc("call_local", "any_peer")
+@rpc("any_peer", "call_local")
 func shot() -> void:
 	if not is_multiplayer_authority(): return
 	destroyed.emit()

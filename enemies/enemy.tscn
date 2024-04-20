@@ -12,7 +12,7 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 8
 collision_mask = 11
 script = ExtResource("1_0avt6")

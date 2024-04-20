@@ -123,4 +123,193 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 33, 48)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
 start_position = Vector3(0, 33, 0)
 
+[node name="EnemySpawnArea10" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -48, 33, 62)
+
+[node name="NavigationLink3D1" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea11" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36, 33, 62)
+
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea12" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -24, 33, 62)
+
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea13" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12, 33, 62)
+
+[node name="NavigationLink3D4" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea14" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 33, 62)
+
+[node name="NavigationLink3D5" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea15" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12, 33, 62)
+
+[node name="NavigationLink3D6" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea16" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 24, 33, 62)
+
+[node name="NavigationLink3D7" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea17" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 36, 33, 62)
+
+[node name="NavigationLink3D8" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea18" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 48, 33, 62)
+
+[node name="NavigationLink3D9" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea19" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, 48)
+
+[node name="NavigationLink3D1" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea20" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, 36)
+
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea21" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, 24)
+
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea22" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, 12)
+
+[node name="NavigationLink3D4" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea23" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, 0)
+
+[node name="NavigationLink3D5" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea23"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea24" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, -12)
+
+[node name="NavigationLink3D6" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea24"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea25" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, -24)
+
+[node name="NavigationLink3D7" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea25"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea26" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, -36)
+
+[node name="NavigationLink3D8" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea26"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea27" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 62, 33, -48)
+
+[node name="NavigationLink3D9" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea27"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea28" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 48, 33, -62)
+
+[node name="NavigationLink3D1" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea28"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea29" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 36, 33, -62)
+
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea29"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea30" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 24, 33, -62)
+
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea30"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea31" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 12, 33, -62)
+
+[node name="NavigationLink3D4" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea31"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea32" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0, 33, -62)
+
+[node name="NavigationLink3D5" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea32"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea33" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -12, 33, -62)
+
+[node name="NavigationLink3D6" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea33"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea34" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -24, 33, -62)
+
+[node name="NavigationLink3D7" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea34"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea35" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -36, 33, -62)
+
+[node name="NavigationLink3D8" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea35"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
+[node name="EnemySpawnArea36" parent="EnemySpawners" groups=["enemy_spawn"] instance=ExtResource("8_1irng")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -48, 33, -62)
+
+[node name="NavigationLink3D9" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea36"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
+start_position = Vector3(0, 33, 0)
+
 [editable path="Environment"]

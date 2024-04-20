@@ -21,7 +21,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	get_tree().call_group("enemy", "approach_closest_player", get_tree().get_nodes_in_group("players"))
+	get_tree().call_group("enemies", "approach_closest_player", get_tree().get_nodes_in_group("players"))
 	if _enemy_queue > 0:
 		spawn_enemy()
 
