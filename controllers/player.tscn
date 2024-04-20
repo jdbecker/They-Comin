@@ -41,6 +41,7 @@ mesh = SubResource("CapsuleMesh_6tv51")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="UI" type="Control" parent="Camera3D"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

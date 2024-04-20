@@ -13,6 +13,7 @@ extends CharacterBody3D
 @onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D
 @onready var hand_slot: Node3D = $Camera3D/HandSlot
 @onready var pause_menu: Control = $Camera3D/PauseMenu
+@onready var ui: Control = $Camera3D/UI
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -39,6 +40,7 @@ func _ready() -> void:
 	# Get mouse input
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
+	ui.show()
 	
 	label.text = Global.data.player_name
 	label.hide()
@@ -171,4 +173,5 @@ func menu() -> void:
 
 
 func _on_quit_button_pressed() -> void:
+	if not is_multiplayer_authority(): return
 	get_tree().quit()
