@@ -12,7 +12,7 @@ var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as floa
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	var current_location := global_transform.origin
-	var next_location := navigation_agent_3d.get_next_path_position()
+	var next_location := get_next_location()
 	var new_velocity := (next_location - current_location).normalized()
 	velocity.x = new_velocity.x * SPEED
 	velocity.z = new_velocity.z * SPEED
@@ -25,6 +25,10 @@ func _physics_process(delta: float) -> void:
 		position.y = lerp(position.y, 0.0, 0.5)
 	
 	move_and_slide()
+
+
+func get_next_location() -> Vector3:
+	return navigation_agent_3d.get_next_path_position()
 
 
 func approach_closest_player(players: Array) -> void:

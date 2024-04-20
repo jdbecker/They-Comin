@@ -62,9 +62,27 @@ pivot_offset = Vector2(960, 540)
 texture = ExtResource("3_b6wk7")
 stretch_mode = 5
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Camera3D/UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Camera3D/UI/HBoxContainer"]
+layout_mode = 2
+text = "Enemies:"
+
+[node name="EnemiesCount" type="Label" parent="Camera3D/UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
 [node name="ReachRayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -3)
 collision_mask = 4
+
+[node name="ShootRayCast3D" type="RayCast3D" parent="Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 8
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)

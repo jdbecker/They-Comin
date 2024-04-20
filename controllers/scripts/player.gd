@@ -11,9 +11,11 @@ extends CharacterBody3D
 @onready var camera: Camera3D = $Camera3D as Camera3D
 @onready var label: Label3D = $Label3D as Label3D
 @onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D
+@onready var shoot_raycast: RayCast3D = $Camera3D/ShootRayCast3D
 @onready var hand_slot: Node3D = $Camera3D/HandSlot
 @onready var pause_menu: Control = $Camera3D/PauseMenu
 @onready var ui: Control = $Camera3D/UI
+@onready var enemies_count: Label = %EnemiesCount
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -141,6 +143,10 @@ func respawn() -> void:
 	position = spawn_area.collision_shape_3d.global_position
 
 
+func update_enemies_count(count: int) -> void:
+	enemies_count.text = str(count)
+
+
 func interact() -> void:
 	if hand_slot.get_child_count() >= 1:
 		pass # drop?
@@ -157,9 +163,8 @@ func trigger() -> void:
 	if hand_slot.get_child_count() <= 0:
 		print("Nothing in hand to trigger!")
 	else:
-		print("pulling the trigger")
 		var gun: Gun = hand_slot.get_children().front() as Gun
-		gun.trigger()
+		gun.trigger(shoot_raycast)
 
 
 func menu() -> void:

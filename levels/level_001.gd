@@ -39,6 +39,9 @@ func spawn_enemy() -> void:
 	if empty_enemy_spawn_areas.is_empty():
 		print("Waiting for free space to spawn enemy...")
 		return
+	if current_enemies() > 400:
+		print("Too many enemies on the field")
+		return
 	empty_enemy_spawn_areas.shuffle()
 	var spawn_area := empty_enemy_spawn_areas.front() as SpawnArea
 	var enemy := ENEMY.instantiate() as Enemy
@@ -48,6 +51,18 @@ func spawn_enemy() -> void:
 	enemy.destroyed.connect(_on_enemy_destroyed)
 	enemy.position = spawn_area.collision_shape_3d.global_position
 	add_child(enemy)
+	update_enemy_count.rpc()
+
+
+@rpc("call_local")
+func update_enemy_count() -> void:
+	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.is_multiplayer_authority()).front() as Player
+	if player:
+		player.update_enemies_count(current_enemies())
+
+
+func current_enemies() -> int:
+	return get_tree().get_nodes_in_group("enemies").size()
 
 
 func remove_player(peer_id: int) -> void:
@@ -64,4 +79,5 @@ func server_disconnected() -> void:
 
 
 func _on_enemy_destroyed() -> void:
+	update_enemy_count.rpc()
 	_enemy_queue += 2
