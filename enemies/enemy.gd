@@ -1,7 +1,7 @@
 class_name Enemy
 extends CharacterBody3D
 
-signal destroyed
+signal destroyed(by: int)
 
 var SPEED := 3.0
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
@@ -46,6 +46,6 @@ func distance_to(target: Node3D) -> float:
 
 @rpc("any_peer", "call_local")
 func shot() -> void:
-	if not is_multiplayer_authority(): return
-	destroyed.emit()
+	assert(is_multiplayer_authority())
+	destroyed.emit(multiplayer.get_remote_sender_id())
 	queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c3ffql15mo0aj"]
+[gd_scene load_steps=11 format=3 uid="uid://c3ffql15mo0aj"]
 
 [ext_resource type="Script" path="res://controllers/scripts/player.gd" id="1_um36a"]
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://materials/player.tres" id="2_gldw4"]
@@ -10,6 +10,14 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_6tv51"]
 material = ExtResource("2_gldw4")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vtxxq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vd1ri"]
+font_size = 112
+font_color = Color(0.776471, 0, 0, 1)
+outline_size = 18
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_v1kmn"]
 properties/0/path = NodePath(".:position")
@@ -37,6 +45,14 @@ shape = SubResource("CapsuleShape3D_u6tj1")
 [node name="PlaceholderMesh" type="MeshInstance3D" parent="CollisionShape3D"]
 mesh = SubResource("CapsuleMesh_6tv51")
 
+[node name="EnemyOverlap" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyOverlap"]
+shape = SubResource("CapsuleShape3D_vtxxq")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
@@ -62,19 +78,64 @@ pivot_offset = Vector2(960, 540)
 texture = ExtResource("3_b6wk7")
 stretch_mode = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Camera3D/UI"]
+[node name="EnemiesCountHBox" type="HBoxContainer" parent="Camera3D/UI"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Camera3D/UI/HBoxContainer"]
+[node name="Label" type="Label" parent="Camera3D/UI/EnemiesCountHBox"]
 layout_mode = 2
+mouse_filter = 1
 text = "Enemies:"
 
-[node name="EnemiesCount" type="Label" parent="Camera3D/UI/HBoxContainer"]
+[node name="EnemiesCount" type="Label" parent="Camera3D/UI/EnemiesCountHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+text = "0"
+
+[node name="KillsHBox" type="HBoxContainer" parent="Camera3D/UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Label" type="Label" parent="Camera3D/UI/KillsHBox"]
+layout_mode = 2
+text = "Kills:"
+
+[node name="KillCount" type="Label" parent="Camera3D/UI/KillsHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
+
+[node name="DeathMessage" type="Label" parent="Camera3D/UI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -394.0
+offset_top = -196.0
+offset_right = 394.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "They got you!"
+label_settings = SubResource("LabelSettings_vd1ri")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseMenu" parent="Camera3D/UI" instance=ExtResource("5_i31rn")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="ReachRayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -3)
@@ -94,9 +155,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418099, -0.251107, -0.46976
 
 [node name="Pistol" parent="Camera3D/HandSlot" instance=ExtResource("4_oynjx")]
 
-[node name="PauseMenu" parent="Camera3D" instance=ExtResource("5_i31rn")]
-visible = false
-
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_v1kmn")
 
@@ -105,7 +163,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 billboard = 1
 text = "blablabla"
 
-[connection signal="pressed" from="Camera3D/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/ResumeButton" to="." method="menu"]
-[connection signal="pressed" from="Camera3D/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="body_entered" from="EnemyOverlap" to="." method="_on_enemy_overlap_body_entered"]
+[connection signal="pressed" from="Camera3D/UI/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/ResumeButton" to="." method="menu"]
+[connection signal="pressed" from="Camera3D/UI/PauseMenu/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 
-[editable path="Camera3D/PauseMenu"]
+[editable path="Camera3D/UI/PauseMenu"]

@@ -3,6 +3,8 @@ extends Node3D
 const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
 
+const MAX_ENEMIES = 300
+
 @onready var menu: Menu = $Menu as Menu
 
 var _enemy_queue: int = 0
@@ -39,7 +41,7 @@ func spawn_enemy() -> void:
 	if empty_enemy_spawn_areas.is_empty():
 		print("Waiting for free space to spawn enemy...")
 		return
-	if current_enemies() > 400:
+	if current_enemies() >= MAX_ENEMIES:
 		print("Too many enemies on the field")
 		return
 	empty_enemy_spawn_areas.shuffle()
@@ -78,6 +80,9 @@ func server_disconnected() -> void:
 		player.queue_free()
 
 
-func _on_enemy_destroyed() -> void:
+func _on_enemy_destroyed(by: int) -> void:
 	update_enemy_count.rpc()
+	var player = get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
+	if player:
+		player.add_kill.rpc_id(by)
 	_enemy_queue += 2

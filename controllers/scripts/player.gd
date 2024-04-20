@@ -8,14 +8,17 @@ extends CharacterBody3D
 @export var JUMP_VELOCITY : float = 4.5
 @export var MOUSE_SENSITIVITY : float = 0.4
 
+@onready var enemy_overlap: Area3D = $EnemyOverlap
 @onready var camera: Camera3D = $Camera3D as Camera3D
 @onready var label: Label3D = $Label3D as Label3D
-@onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D
-@onready var shoot_raycast: RayCast3D = $Camera3D/ShootRayCast3D
-@onready var hand_slot: Node3D = $Camera3D/HandSlot
-@onready var pause_menu: Control = $Camera3D/PauseMenu
-@onready var ui: Control = $Camera3D/UI
-@onready var enemies_count: Label = %EnemiesCount
+@onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D as RayCast3D
+@onready var shoot_raycast: RayCast3D = $Camera3D/ShootRayCast3D as RayCast3D
+@onready var hand_slot: Node3D = $Camera3D/HandSlot as Node3D
+@onready var pause_menu: Control = %PauseMenu as Control
+@onready var ui: Control = $Camera3D/UI as Control
+@onready var death_message: Label = %DeathMessage as Label
+@onready var enemies_count: Label = %EnemiesCount as Label
+@onready var kill_count_label: Label = %KillCount as Label
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -30,6 +33,8 @@ var _camera_rotation : Vector3
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
+
+var kill_count: int = 0: set = _set_kill_count
 
 
 func _enter_tree() -> void:
@@ -130,7 +135,13 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+func _set_kill_count(value: int) -> void:
+	kill_count = value
+	kill_count_label.text = str(value)
+
+
 func respawn() -> void:
+	kill_count = 0
 	velocity = Vector3.ZERO
 	_mouse_rotation = Vector3.ZERO
 	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
@@ -145,6 +156,11 @@ func respawn() -> void:
 
 func update_enemies_count(count: int) -> void:
 	enemies_count.text = str(count)
+
+
+@rpc("call_local")
+func add_kill() -> void:
+	kill_count += 1
 
 
 func interact() -> void:
@@ -180,3 +196,13 @@ func menu() -> void:
 func _on_quit_button_pressed() -> void:
 	if not is_multiplayer_authority(): return
 	get_tree().quit()
+
+
+func _on_enemy_overlap_body_entered(body: Node3D) -> void:
+	if body.is_in_group("enemies"):
+		var enemy := body as Enemy
+		if enemy:
+			death_message.text = "They got you!\n You had %s kills." % kill_count
+			death_message.show()
+			get_tree().create_timer(3).timeout.connect(func() -> void: death_message.hide())
+			respawn()

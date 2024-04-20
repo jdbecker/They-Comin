@@ -14,7 +14,7 @@ properties/0/replication_mode = 1
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 8
-collision_mask = 11
+collision_mask = 9
 script = ExtResource("1_0avt6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
