@@ -32,6 +32,7 @@ func get_next_location() -> Vector3:
 
 
 func approach_closest_player(players: Array) -> void:
+	if players.is_empty(): return
 	var closest_player := players.reduce(
 		func(accum: Player, player: Player) -> Player:
 			if distance_to(player) < distance_to(accum): return player else: return accum

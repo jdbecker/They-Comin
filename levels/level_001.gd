@@ -6,6 +6,7 @@ const ENEMY = preload("res://enemies/enemy.tscn")
 const MAX_ENEMIES = 200
 
 @onready var menu: Menu = $Menu as Menu
+@onready var arena_area: Area3D = $ArenaArea as Area3D
 
 var _enemy_queue: int = 0
 var _enemy_count: int = 0
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	get_tree().call_group("enemies", "approach_closest_player", get_tree().get_nodes_in_group("players"))
+	get_tree().call_group("enemies", "approach_closest_player", get_tree().get_nodes_in_group("players").filter(func(player: Player)-> bool: return arena_area.get_overlapping_bodies().find(player) != -1 ))
 	if _enemy_queue > 0:
 		spawn_enemy()
 
@@ -31,8 +32,9 @@ func _physics_process(_delta: float) -> void:
 func add_player(id: int) -> void:
 	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
+	player.died.connect(_on_player_died)
+	player.position.y = 34
 	add_child(player)
-	_enemy_queue += 1
 
 
 func spawn_enemy() -> void:
@@ -53,14 +55,14 @@ func spawn_enemy() -> void:
 	enemy.destroyed.connect(_on_enemy_destroyed)
 	enemy.position = spawn_area.collision_shape_3d.global_position
 	add_child(enemy)
-	update_enemy_count.rpc()
+	update_enemy_count.rpc(current_enemies())
 
 
 @rpc("call_local")
-func update_enemy_count() -> void:
+func update_enemy_count(count: int) -> void:
 	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.is_multiplayer_authority()).front() as Player
 	if player:
-		player.update_enemies_count(current_enemies())
+		player.update_enemies_count(count)
 
 
 func current_enemies() -> int:
@@ -80,9 +82,35 @@ func server_disconnected() -> void:
 		player.queue_free()
 
 
+func reset() -> void:
+	if not is_multiplayer_authority(): return
+	_enemy_queue = 0
+	get_tree().call_group("enemies", "queue_free")
+	update_enemy_count.rpc(0)
+
+
 func _on_enemy_destroyed(by: int) -> void:
-	update_enemy_count.rpc()
+	update_enemy_count.rpc(current_enemies())
 	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
 	if player:
 		player.add_kill.rpc_id(by)
 	_enemy_queue += 2
+
+
+func _on_player_died() -> void:
+	if not is_multiplayer_authority(): return
+	await arena_area.body_exited
+	if not arena_area.has_overlapping_bodies():
+		reset()
+	else:
+		print("Not resetting because these players are still in play:")
+		for body in arena_area.get_overlapping_bodies():
+			print(body)
+
+
+func _on_arena_area_body_entered(body: Node3D) -> void:
+	if not is_multiplayer_authority(): return
+	var player := body as Player
+	if player and _enemy_queue <= 0 and current_enemies() <= 0:
+		print("A player has entered the arena!")
+		_enemy_queue = 1

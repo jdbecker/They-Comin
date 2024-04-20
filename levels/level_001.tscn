@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1yleqbb8tc7x"]
+[gd_scene load_steps=11 format=3 uid="uid://b1yleqbb8tc7x"]
 
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" path="res://levels/level_001.gd" id="1_uhsmk"]
@@ -17,6 +17,9 @@ uv1_triplanar = true
 cull_mode = 2
 albedo_texture = ExtResource("4_4ltpw")
 uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6vamy"]
+size = Vector3(120, 30, 120)
 
 [node name="Level_001" type="Node3D"]
 script = ExtResource("1_uhsmk")
@@ -311,5 +314,16 @@ transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -48, 33,
 [node name="NavigationLink3D9" type="NavigationLink3D" parent="EnemySpawners/EnemySpawnArea36"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -33, 0)
 start_position = Vector3(0, 33, 0)
+
+[node name="ArenaArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ArenaArea"]
+shape = SubResource("BoxShape3D_6vamy")
+
+[connection signal="body_entered" from="ArenaArea" to="." method="_on_arena_area_body_entered"]
 
 [editable path="Environment"]

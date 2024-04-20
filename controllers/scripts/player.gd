@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody3D
 
-@export var player_name: String = "Player Name"
+signal died
+
 @export var SPEED : float = 5.0
 @export var SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
@@ -77,6 +78,9 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("trigger"):
 		trigger()
+	
+	if event.is_action_pressed("cheat_kill") and Global.data.player_name == "json":
+		cheat_kill()
 
 
 func _update_camera(delta: float) -> void:
@@ -145,10 +149,8 @@ func respawn() -> void:
 	velocity = Vector3.ZERO
 	_mouse_rotation = Vector3.ZERO
 	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
-	while empty_spawn_areas.is_empty():
-		print("waiting for room to spawn...")
-		await get_tree().create_timer(3).timeout
-		empty_spawn_areas = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
+	if empty_spawn_areas.is_empty():
+		empty_spawn_areas = get_tree().get_nodes_in_group("player_spawn") as Array
 	empty_spawn_areas.shuffle()
 	var spawn_area: SpawnArea = empty_spawn_areas.front() as SpawnArea
 	position = spawn_area.collision_shape_3d.global_position
@@ -164,15 +166,12 @@ func add_kill() -> void:
 
 
 func interact() -> void:
-	if hand_slot.get_child_count() >= 1:
-		pass # drop?
-	else:
-		var object := reach_raycast.get_collider() as Node
-		if object and object.is_in_group("guns"):
-			var gun := object.duplicate() as RigidBody3D
-			gun.freeze = true
-			gun.transform = Transform3D.IDENTITY
-			hand_slot.add_child(gun)
+	var object := reach_raycast.get_collider() as Node
+	if object and object.is_in_group("guns"):
+		var gun := object.duplicate() as RigidBody3D
+		gun.freeze = true
+		gun.transform = Transform3D.IDENTITY
+		hand_slot.add_child(gun)
 
 
 func trigger() -> void:
@@ -193,6 +192,12 @@ func menu() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
+func cheat_kill() -> void:
+	var enemy := get_tree().get_nodes_in_group("enemies").front() as Enemy
+	if enemy:
+		enemy.shot.rpc_id(1)
+
+
 func _on_quit_button_pressed() -> void:
 	if not is_multiplayer_authority(): return
 	get_tree().quit()
@@ -206,3 +211,4 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 			death_message.show()
 			get_tree().create_timer(3).timeout.connect(func() -> void: death_message.hide())
 			respawn()
+			died.emit()
