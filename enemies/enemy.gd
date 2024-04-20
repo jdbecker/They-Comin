@@ -10,9 +10,10 @@ var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as floa
 
 
 func _physics_process(delta: float) -> void:
-	var current_location = global_transform.origin
-	var next_location = navigation_agent_3d.get_next_path_position()
-	var new_velocity = (next_location - current_location).normalized()
+	if not is_multiplayer_authority(): return
+	var current_location := global_transform.origin
+	var next_location := navigation_agent_3d.get_next_path_position()
+	var new_velocity := (next_location - current_location).normalized()
 	velocity.x = new_velocity.x * SPEED
 	velocity.z = new_velocity.z * SPEED
 	
@@ -27,7 +28,10 @@ func _physics_process(delta: float) -> void:
 
 
 func approach_closest_player(players: Array) -> void:
-	var closest_player = players.reduce(func(accum: Player, player: Player) -> Player: if distance_to(player) > distance_to(accum): return player else: return accum)
+	var closest_player := players.reduce(
+		func(accum: Player, player: Player) -> Player:
+			if distance_to(player) < distance_to(accum): return player else: return accum
+	) as Player
 	if closest_player:
 		navigation_agent_3d.target_position = closest_player.global_transform.origin
 
@@ -36,6 +40,8 @@ func distance_to(target: Node3D) -> float:
 	return global_transform.origin.distance_to(target.global_transform.origin)
 
 
+@rpc("call_local", "any_peer")
 func shot() -> void:
+	if not is_multiplayer_authority(): return
 	destroyed.emit()
 	queue_free()

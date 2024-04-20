@@ -31,7 +31,7 @@ var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as floa
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
 
-	
+
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
 
@@ -54,7 +54,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var mouse_motion := event as InputEventMouseMotion
 		_rotation_input = -mouse_motion.relative.x * MOUSE_SENSITIVITY
 		_tilt_input = -mouse_motion.relative.y * MOUSE_SENSITIVITY
-		
+
+
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
@@ -66,7 +67,8 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("trigger"):
 		trigger()
-		
+
+
 func _update_camera(delta: float) -> void:
 	
 	# Rotates camera using euler rotation
@@ -84,6 +86,7 @@ func _update_camera(delta: float) -> void:
 
 	_rotation_input = 0.0
 	_tilt_input = 0.0
+
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return

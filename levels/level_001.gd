@@ -4,14 +4,9 @@ const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
 
 @onready var menu: Menu = $Menu as Menu
-#@onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 
-
-#func _enter_tree() -> void:
-	#var spawner := $MultiplayerSpawner as MultiplayerSpawner
-	#spawner.spawn_function = _spawn_player
-	#
-	#multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+var _enemy_queue: int = 0
+var _enemy_count: int = 0
 
 
 func _ready() -> void:
@@ -24,18 +19,35 @@ func _ready() -> void:
 	Lobby.player_disconnected.connect(remove_player)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	get_tree().call_group("enemy", "approach_closest_player", get_tree().get_nodes_in_group("players"))
+	if _enemy_queue > 0:
+		spawn_enemy()
 
 
 func add_player(id: int) -> void:
 	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
 	add_child(player)
+	_enemy_queue += 1
 
 
-#func add_player(peer_id: int) -> void:
-		#multiplayer_spawner.spawn(peer_id)
+func spawn_enemy() -> void:
+	var enemy_spawn_areas := get_tree().get_nodes_in_group("enemy_spawn")
+	var empty_enemy_spawn_areas := enemy_spawn_areas.filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
+	if empty_enemy_spawn_areas.is_empty():
+		print("Waiting for free space to spawn enemy...")
+		return
+	empty_enemy_spawn_areas.shuffle()
+	var spawn_area := empty_enemy_spawn_areas.front() as SpawnArea
+	var enemy := ENEMY.instantiate() as Enemy
+	_enemy_queue -= 1
+	_enemy_count += 1
+	enemy.name = str("enemy%s" % _enemy_count)
+	enemy.destroyed.connect(_on_enemy_destroyed)
+	enemy.position = spawn_area.collision_shape_3d.global_position
+	add_child(enemy)
 
 
 func remove_player(peer_id: int) -> void:
@@ -52,10 +64,4 @@ func server_disconnected() -> void:
 
 
 func _on_enemy_destroyed() -> void:
-	var enemy := ENEMY.instantiate() as Enemy
-	enemy.destroyed.connect(_on_enemy_destroyed)
-	var enemy_spawn_areas := get_tree().get_nodes_in_group("enemy_spawn")
-	enemy_spawn_areas.shuffle()
-	var spawn_area = enemy_spawn_areas.front() as SpawnArea
-	enemy.position = spawn_area.collision_shape_3d.global_position
-	add_child(enemy)
+	_enemy_queue += 2
