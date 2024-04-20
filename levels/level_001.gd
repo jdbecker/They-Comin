@@ -3,7 +3,7 @@ extends Node3D
 const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
 
-const MAX_ENEMIES = 300
+const MAX_ENEMIES = 200
 
 @onready var menu: Menu = $Menu as Menu
 
@@ -82,7 +82,7 @@ func server_disconnected() -> void:
 
 func _on_enemy_destroyed(by: int) -> void:
 	update_enemy_count.rpc()
-	var player = get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
+	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
 	if player:
 		player.add_kill.rpc_id(by)
 	_enemy_queue += 2

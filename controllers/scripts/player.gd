@@ -158,7 +158,7 @@ func update_enemies_count(count: int) -> void:
 	enemies_count.text = str(count)
 
 
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func add_kill() -> void:
 	kill_count += 1
 
