@@ -8,6 +8,7 @@ const MAX_ENEMIES = 200
 @onready var menu: Menu = $Menu as Menu
 @onready var arena_area: Area3D = $ArenaArea as Area3D
 @onready var enemy_pathfinding_update_timer: Timer = $EnemyPathfindingUpdateTimer as Timer
+@onready var window: EntryWindow = $Window as EntryWindow
 
 var _enemy_queue: int = 0
 var _enemy_count: int = 0
@@ -21,6 +22,11 @@ func _ready() -> void:
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact"):
+		window.toggle()
 
 
 func _physics_process(_delta: float) -> void:

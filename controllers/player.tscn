@@ -143,7 +143,8 @@ collision_mask = 4
 
 [node name="ShootRayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -100)
-collision_mask = 8
+collision_mask = 9
+collide_with_areas = true
 
 [node name="HandSlot" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418099, -0.251107, -0.469765)
