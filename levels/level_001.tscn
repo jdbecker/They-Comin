@@ -41,6 +41,10 @@ collision_priority = 9.22337e+18
 _spawnable_scenes = PackedStringArray("res://controllers/player.tscn", "res://enemies/enemy.tscn")
 spawn_path = NodePath("..")
 
+[node name="EnemyPathfindingUpdateTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
 [node name="PlayerSpawners" type="Node3D" parent="."]
 
 [node name="PlayerSpawnArea1" parent="PlayerSpawners" groups=["player_spawn"] instance=ExtResource("8_1irng")]
@@ -324,6 +328,7 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ArenaArea"]
 shape = SubResource("BoxShape3D_6vamy")
 
+[connection signal="timeout" from="EnemyPathfindingUpdateTimer" to="." method="_on_enemy_pathfinding_update_timer_timeout"]
 [connection signal="body_entered" from="ArenaArea" to="." method="_on_arena_area_body_entered"]
 
 [editable path="Environment"]

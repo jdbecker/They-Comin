@@ -2,6 +2,7 @@ class_name Player
 extends CharacterBody3D
 
 signal died
+signal cheat_queue_wave
 
 @export var SPEED : float = 5.0
 @export var SPRINT_MULTI : float = 2.0
@@ -81,6 +82,9 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("cheat_kill") and Global.data.player_name == "json":
 		cheat_kill()
+	
+	if event.is_action_pressed("spawn_wave") and Global.data.player_name == "json":
+		cheat_queue_wave.emit()
 
 
 func _update_camera(delta: float) -> void:

@@ -7,6 +7,7 @@ const MAX_ENEMIES = 200
 
 @onready var menu: Menu = $Menu as Menu
 @onready var arena_area: Area3D = $ArenaArea as Area3D
+@onready var enemy_pathfinding_update_timer: Timer = $EnemyPathfindingUpdateTimer as Timer
 
 var _enemy_queue: int = 0
 var _enemy_count: int = 0
@@ -24,7 +25,6 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	get_tree().call_group("enemies", "approach_closest_player", get_tree().get_nodes_in_group("players").filter(func(player: Player)-> bool: return arena_area.get_overlapping_bodies().find(player) != -1 ))
 	if _enemy_queue > 0:
 		spawn_enemy()
 
@@ -33,6 +33,7 @@ func add_player(id: int) -> void:
 	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
 	player.died.connect(_on_player_died)
+	player.cheat_queue_wave.connect(func() -> void: _enemy_queue += 36)
 	player.position.y = 34
 	add_child(player)
 
@@ -44,7 +45,7 @@ func spawn_enemy() -> void:
 		print("Waiting for free space to spawn enemy...")
 		return
 	if current_enemies() >= MAX_ENEMIES:
-		print("Too many enemies on the field")
+		#print("Too many enemies on the field")
 		return
 	empty_enemy_spawn_areas.shuffle()
 	var spawn_area := empty_enemy_spawn_areas.front() as SpawnArea
@@ -114,3 +115,12 @@ func _on_arena_area_body_entered(body: Node3D) -> void:
 	if player and _enemy_queue <= 0 and current_enemies() <= 0:
 		print("A player has entered the arena!")
 		_enemy_queue = 1
+
+
+func _on_enemy_pathfinding_update_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
+	var players: Array = get_tree().get_nodes_in_group("players")
+	var active_players: Array = players.filter(func(player: Player)-> bool:
+		return arena_area.get_overlapping_bodies().find(player) != -1 )
+	var player_coords: Array = active_players.map(func(player: Player) -> Vector3: return player.global_transform.origin)
+	get_tree().call_group("enemies", "approach_closest_player", player_coords)
