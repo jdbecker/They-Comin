@@ -6,12 +6,14 @@ const ENEMY = preload("res://enemies/enemy.tscn")
 const MAX_ENEMIES = 200
 
 @onready var menu: Menu = $Menu as Menu
-@onready var arena_area: Area3D = $ArenaArea as Area3D
+@onready var arena_area: Area3D = $PlayerArenaArea as Area3D
+@onready var enemy_arena_area: Area3D = $EnemyArenaArea
 @onready var enemy_pathfinding_update_timer: Timer = $EnemyPathfindingUpdateTimer as Timer
 @onready var window: EntryWindow = $Window as EntryWindow
 
 var _enemy_queue: int = 0
 var _enemy_count: int = 0
+var _wave: int = 0
 
 
 func _ready() -> void:
@@ -25,6 +27,7 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if not is_multiplayer_authority(): return
 	if event.is_action_pressed("interact"):
 		window.toggle()
 
@@ -38,7 +41,6 @@ func _physics_process(_delta: float) -> void:
 func add_player(id: int) -> void:
 	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
-	player.died.connect(_on_player_died)
 	player.cheat_queue_wave.connect(func() -> void: _enemy_queue += 36)
 	player.position.y = 34
 	add_child(player)
@@ -76,6 +78,14 @@ func current_enemies() -> int:
 	return get_tree().get_nodes_in_group("enemies").size()
 
 
+func current_players() -> int:
+	return get_tree().get_nodes_in_group("players").size()
+
+
+func alive_players() -> int:
+	return arena_area.get_overlapping_bodies().size()
+
+
 func remove_player(peer_id: int) -> void:
 	for player: Player in get_tree().get_nodes_in_group("players"):
 		if player.name == str(peer_id):
@@ -92,35 +102,43 @@ func server_disconnected() -> void:
 func reset() -> void:
 	if not is_multiplayer_authority(): return
 	_enemy_queue = 0
+	_wave = 0
 	get_tree().call_group("enemies", "queue_free")
 	update_enemy_count.rpc(0)
+	window.open()
 
 
 func _on_enemy_destroyed(by: int) -> void:
-	update_enemy_count.rpc(current_enemies())
 	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
 	if player:
 		player.add_kill.rpc_id(by)
-	_enemy_queue += 2
 
 
-func _on_player_died() -> void:
+func update_enemies() -> void:
+	var remaining_enemies := current_enemies()
+	update_enemy_count.rpc(remaining_enemies)
+	if remaining_enemies <= 0 and alive_players() >= 1:
+		window.open()
+		await get_tree().create_timer(8).timeout
+		start_wave()
+
+
+func _on_arena_area_body_exited(body: Node3D) -> void:
 	if not is_multiplayer_authority(): return
-	await arena_area.body_exited
-	if not arena_area.has_overlapping_bodies():
+	var player := body as Player
+	if player and not arena_area.has_overlapping_bodies():
 		reset()
-	else:
-		print("Not resetting because these players are still in play:")
-		for body in arena_area.get_overlapping_bodies():
-			print(body)
 
 
 func _on_arena_area_body_entered(body: Node3D) -> void:
 	if not is_multiplayer_authority(): return
 	var player := body as Player
-	if player and _enemy_queue <= 0 and current_enemies() <= 0:
-		print("A player has entered the arena!")
-		_enemy_queue = 1
+	if player:
+		var players_outside_arena := current_players() - arena_area.get_overlapping_bodies().size()
+		if players_outside_arena == 0:
+			start_wave()
+		else:
+			print("Waiting on %s players before starting wave..." % players_outside_arena)
 
 
 func _on_enemy_pathfinding_update_timer_timeout() -> void:
@@ -130,3 +148,15 @@ func _on_enemy_pathfinding_update_timer_timeout() -> void:
 		return arena_area.get_overlapping_bodies().find(player) != -1 )
 	var player_coords: Array = active_players.map(func(player: Player) -> Vector3: return player.global_transform.origin)
 	get_tree().call_group("enemies", "approach_closest_player", player_coords)
+
+
+func start_wave() -> void:
+	window.close()
+	_wave += 1
+	_enemy_queue += 36
+
+
+func _on_enemy_arena_area_body_exited(body: Node3D) -> void:
+	var enemy: Enemy = body as Enemy
+	if enemy:
+		update_enemies.call_deferred()

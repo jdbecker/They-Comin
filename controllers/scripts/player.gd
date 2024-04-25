@@ -1,7 +1,6 @@
 class_name Player
 extends CharacterBody3D
 
-signal died
 signal cheat_queue_wave
 
 @export var SPEED : float = 5.0
@@ -215,4 +214,3 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 			death_message.show()
 			get_tree().create_timer(3).timeout.connect(func() -> void: death_message.hide())
 			respawn()
-			died.emit()
