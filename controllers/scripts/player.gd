@@ -192,7 +192,7 @@ func trigger() -> void:
 			gun.trigger(shoot_raycast)
 
 
-@rpc()
+@rpc("call_local")
 func gun_effect() -> void:
 	pistol_animator.play("gun_fire")
 	laser_sound_player.play()
