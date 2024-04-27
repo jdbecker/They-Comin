@@ -62,7 +62,7 @@ func spawn_enemy() -> void:
 	enemy.name = str("enemy%s" % _enemy_count)
 	enemy.destroyed.connect(_on_enemy_destroyed)
 	enemy.position = spawn_area.collision_shape_3d.global_position
-	enemy.max_hp = _wave + 1
+	enemy.max_hp = _wave
 	add_child(enemy)
 	update_enemy_count.rpc(current_enemies())
 

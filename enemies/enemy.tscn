@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ekmf0tgrvv0r"]
+[gd_scene load_steps=9 format=3 uid="uid://ekmf0tgrvv0r"]
 
 [ext_resource type="Script" path="res://enemies/enemy.gd" id="1_0avt6"]
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://materials/enemy.tres" id="2_7kvh7"]
 [ext_resource type="PackedScene" uid="uid://cg6afyibf4q6c" path="res://enemies/enemy_hp_bar.tscn" id="3_dekwv"]
+[ext_resource type="AudioStream" uid="uid://cxely823wgxl5" path="res://addons/kenney sci-fi sounds/explosion_crunch_000.ogg" id="4_2e76d"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_t5dgi"]
 
@@ -53,3 +54,8 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 billboard = 1
 texture = SubResource("ViewportTexture_mri06")
+
+[node name="DeathSoundPlayer" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+stream = ExtResource("4_2e76d")
+max_polyphony = 3

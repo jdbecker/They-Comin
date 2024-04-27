@@ -6,12 +6,13 @@ signal destroyed(by: int)
 @export var logging: bool = false
 @export var max_hp: int = 2 : set = _set_max_hp
 @export var current_hp: int = max_hp : set = _setcurrent_hp
+@export var speed := 5.0
 
-var SPEED := 3.0
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
 
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D as NavigationAgent3D
 @onready var enemy_hp_bar: ProgressBar = %EnemyHpBar
+@onready var death_sound_player: AudioStreamPlayer3D = $DeathSoundPlayer
 
 
 func _physics_process(delta: float) -> void:
@@ -43,8 +44,8 @@ func get_direction() -> Vector3:
 
 func apply_velocity() -> void:
 	var direction := get_direction()
-	velocity.z = direction.z * SPEED
-	velocity.x = direction.x * SPEED
+	velocity.z = direction.z * speed
+	velocity.x = direction.x * speed
 
 
 func add_gravity(delta: float) -> void:
@@ -79,11 +80,21 @@ func distance_to(target: Vector3) -> float:
 
 @rpc("any_peer", "call_local")
 func shot() -> void:
-	assert(is_multiplayer_authority())
 	current_hp -= 1
 	if current_hp <= 0:
-		destroyed.emit(multiplayer.get_remote_sender_id())
-		queue_free()
+		destroy.rpc()
+
+
+@rpc()
+func destroy() -> void:
+	remove_from_group("enemies")
+	speed = 0
+	collision_layer = 3
+	enemy_hp_bar.hide()
+	death_sound_player.play()
+	destroyed.emit(multiplayer.get_remote_sender_id())
+	await get_tree().create_timer(1).timeout
+	queue_free()
 
 
 func _set_max_hp(value: int) -> void:

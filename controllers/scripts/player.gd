@@ -20,6 +20,8 @@ signal cheat_queue_wave
 @onready var message: Label = %Message as Label
 @onready var enemies_count: Label = %EnemiesCount as Label
 @onready var kill_count_label: Label = %KillCount as Label
+@onready var pistol_animator: AnimationPlayer = $Camera3D/HandSlot/PistolAnimator
+@onready var laser_sound_player: AudioStreamPlayer3D = $Camera3D/HandSlot/LaserSoundPlayer
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -129,7 +131,7 @@ func _physics_process(delta: float) -> void:
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if direction:
-		if Input.is_action_pressed("sprint"):
+		if Input.is_action_pressed("sprint") and Input.is_action_pressed("move_forward") and is_on_floor():
 			velocity.x = lerp(velocity.x, direction.x * SPEED * SPRINT_MULTI, INERTIA)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * SPRINT_MULTI, INERTIA)
 		else:
@@ -184,8 +186,16 @@ func trigger() -> void:
 	if hand_slot.get_child_count() <= 0:
 		print("Nothing in hand to trigger!")
 	else:
-		var gun: Gun = hand_slot.get_children().front() as Gun
-		gun.trigger(shoot_raycast)
+		if not pistol_animator.is_playing():
+			gun_effect.rpc()
+			var gun: Gun = hand_slot.get_children().front() as Gun
+			gun.trigger(shoot_raycast)
+
+
+@rpc()
+func gun_effect() -> void:
+	pistol_animator.play("gun_fire")
+	laser_sound_player.play()
 
 
 func menu() -> void:
