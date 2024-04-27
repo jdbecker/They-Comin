@@ -4,11 +4,14 @@ extends CharacterBody3D
 signal destroyed(by: int)
 
 @export var logging: bool = false
+@export var max_hp: int = 2 : set = _set_max_hp
+@export var current_hp: int = max_hp : set = _setcurrent_hp
 
 var SPEED := 3.0
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
 
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D as NavigationAgent3D
+@onready var enemy_hp_bar: ProgressBar = %EnemyHpBar
 
 
 func _physics_process(delta: float) -> void:
@@ -77,5 +80,23 @@ func distance_to(target: Vector3) -> float:
 @rpc("any_peer", "call_local")
 func shot() -> void:
 	assert(is_multiplayer_authority())
-	destroyed.emit(multiplayer.get_remote_sender_id())
-	queue_free()
+	current_hp -= 1
+	if current_hp <= 0:
+		destroyed.emit(multiplayer.get_remote_sender_id())
+		queue_free()
+
+
+func _set_max_hp(value: int) -> void:
+	if not is_node_ready():
+		await ready
+	max_hp = value
+	current_hp = max_hp
+	enemy_hp_bar.max_value = max_hp
+	enemy_hp_bar.value = max_hp
+
+
+func _setcurrent_hp(value: int) -> void:
+	if not is_node_ready():
+		await ready
+	current_hp = value
+	enemy_hp_bar.value = current_hp

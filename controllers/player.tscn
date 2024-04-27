@@ -15,7 +15,6 @@ material = ExtResource("2_gldw4")
 
 [sub_resource type="LabelSettings" id="LabelSettings_vd1ri"]
 font_size = 112
-font_color = Color(0.776471, 0, 0, 1)
 outline_size = 18
 outline_color = Color(0, 0, 0, 1)
 
@@ -57,7 +56,6 @@ shape = SubResource("CapsuleShape3D_vtxxq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="UI" type="Control" parent="Camera3D"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -112,22 +110,22 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 
-[node name="DeathMessage" type="Label" parent="Camera3D/UI"]
+[node name="Message" type="Label" parent="Camera3D/UI"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -394.0
-offset_top = -196.0
-offset_right = 394.0
-offset_bottom = -43.0
+offset_left = -436.5
+offset_top = -362.0
+offset_right = 436.5
+offset_bottom = -53.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "They got you!"
+text = "They got you!
+0 enemies killed"
 label_settings = SubResource("LabelSettings_vd1ri")
 horizontal_alignment = 1
 vertical_alignment = 1

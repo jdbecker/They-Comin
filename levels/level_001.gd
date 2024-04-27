@@ -2,18 +2,17 @@ extends Node3D
 
 const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
-
 const MAX_ENEMIES = 200
+
+var _enemy_queue: int = 0
+var _enemy_count: int = 0
+var _wave: int = 0
 
 @onready var menu: Menu = $Menu as Menu
 @onready var arena_area: Area3D = $PlayerArenaArea as Area3D
 @onready var enemy_arena_area: Area3D = $EnemyArenaArea
 @onready var enemy_pathfinding_update_timer: Timer = $EnemyPathfindingUpdateTimer as Timer
 @onready var window: EntryWindow = $Window as EntryWindow
-
-var _enemy_queue: int = 0
-var _enemy_count: int = 0
-var _wave: int = 0
 
 
 func _ready() -> void:
@@ -63,6 +62,7 @@ func spawn_enemy() -> void:
 	enemy.name = str("enemy%s" % _enemy_count)
 	enemy.destroyed.connect(_on_enemy_destroyed)
 	enemy.position = spawn_area.collision_shape_3d.global_position
+	enemy.max_hp = _wave + 1
 	add_child(enemy)
 	update_enemy_count.rpc(current_enemies())
 
@@ -115,11 +115,10 @@ func _on_enemy_destroyed(by: int) -> void:
 
 
 func update_enemies() -> void:
+	if not is_multiplayer_authority(): return
 	var remaining_enemies := current_enemies()
 	update_enemy_count.rpc(remaining_enemies)
 	if remaining_enemies <= 0 and alive_players() >= 1:
-		window.open()
-		await get_tree().create_timer(8).timeout
 		start_wave()
 
 
@@ -135,10 +134,8 @@ func _on_arena_area_body_entered(body: Node3D) -> void:
 	var player := body as Player
 	if player:
 		var players_outside_arena := current_players() - arena_area.get_overlapping_bodies().size()
-		if players_outside_arena == 0:
+		if players_outside_arena == 0 and _wave == 0:
 			start_wave()
-		else:
-			print("Waiting on %s players before starting wave..." % players_outside_arena)
 
 
 func _on_enemy_pathfinding_update_timer_timeout() -> void:
@@ -150,9 +147,20 @@ func _on_enemy_pathfinding_update_timer_timeout() -> void:
 	get_tree().call_group("enemies", "approach_closest_player", player_coords)
 
 
+func message_players(message: String) -> void:
+	for player: Player in get_tree().get_nodes_in_group("players"):
+		player.display_message.rpc_id(player.name.to_int(), message)
+
+
 func start_wave() -> void:
-	window.close()
+	if not is_multiplayer_authority(): return
+	window.open()
 	_wave += 1
+	for i: int in range(10, 0, -1):
+		message_players("Wave %s starting\nin %s seconds" % [_wave, i])
+		await get_tree().create_timer(1).timeout
+	message_players("Here they come!")
+	window.close()
 	_enemy_queue += 36
 
 

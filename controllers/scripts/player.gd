@@ -17,7 +17,7 @@ signal cheat_queue_wave
 @onready var hand_slot: Node3D = $Camera3D/HandSlot as Node3D
 @onready var pause_menu: Control = %PauseMenu as Control
 @onready var ui: Control = $Camera3D/UI as Control
-@onready var death_message: Label = %DeathMessage as Label
+@onready var message: Label = %Message as Label
 @onready var enemies_count: Label = %EnemiesCount as Label
 @onready var kill_count_label: Label = %KillCount as Label
 
@@ -31,6 +31,7 @@ var _tilt_input : float
 var _mouse_rotation : Vector3
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
+var _tween: Tween
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
@@ -43,11 +44,13 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	ui.hide()
 	if not is_multiplayer_authority(): return
 
 	# Get mouse input
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
+	message.modulate = Color(1, 1, 1, 0)
 	ui.show()
 	
 	label.text = Global.data.player_name
@@ -210,7 +213,17 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 	if body.is_in_group("enemies"):
 		var enemy := body as Enemy
 		if enemy:
-			death_message.text = "They got you!\n You had %s kills." % kill_count
-			death_message.show()
-			get_tree().create_timer(3).timeout.connect(func() -> void: death_message.hide())
+			display_message("They got you!\n You had %s kills." % kill_count)
 			respawn()
+
+
+@rpc("call_local", "any_peer")
+func display_message(message_text: String) -> void:
+	message.text = message_text
+	if _tween:
+		_tween.stop()
+	_tween = get_tree().create_tween().set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	_tween.set_parallel(false)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), .5)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), 2)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 0), 1)
