@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3 uid="uid://dbgs8rqmbjevt"]
+
+[ext_resource type="PackedScene" uid="uid://cfdhrwg6j8lb" path="res://blend_files/Pistol.blend" id="1_0ojjs"]
+[ext_resource type="Script" path="res://guns/gun.gd" id="2_1bu7o"]
+[ext_resource type="AudioStream" uid="uid://bskwat77hn000" path="res://addons/kenney sci-fi sounds/laser_small_000.ogg" id="3_t26jl"]
+
+[sub_resource type="Animation" id="Animation_xocu4"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_5kjli"]
+resource_name = "gun_fire"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.173, 0.134), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.61858, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hkoat"]
+_data = {
+"RESET": SubResource("Animation_xocu4"),
+"gun_fire": SubResource("Animation_5kjli")
+}
+
+[node name="Gun" instance=ExtResource("1_0ojjs")]
+script = ExtResource("2_1bu7o")
+
+[node name="Pistol-rigid" parent="." index="0" groups=["guns"]]
+collision_layer = 4
+freeze = true
+continuous_cd = true
+
+[node name="Pistol-rigid" parent="Pistol-rigid" index="0"]
+layers = 4
+
+[node name="PistolAnimator" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_hkoat")
+}
+
+[node name="GunSoundPlayer" type="AudioStreamPlayer3D" parent="." index="2"]
+stream = ExtResource("3_t26jl")
+
+[node name="GunThumbnailCamera" type="Camera3D" parent="." index="3"]
+transform = Transform3D(1.19209e-07, 0, -1, 0, 1, 0, 1, 0, 1.19209e-07, -0.6, 0, 0)

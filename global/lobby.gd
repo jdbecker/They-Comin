@@ -3,6 +3,7 @@ extends Node
 signal player_connected(peer_id: int)
 signal player_disconnected(peer_id: int)
 signal server_disconnected
+signal connected_ok
 
 const PORT := 7677
 
@@ -42,6 +43,7 @@ func join_game(address: String) -> void:
 func _on_connected_ok() -> void:
 	var peer_id := multiplayer.get_unique_id()
 	players[peer_id] = Global.data.player_name
+	connected_ok.emit()
 
 
 func _on_player_connected(id: int) -> void:
@@ -53,11 +55,6 @@ func _on_player_connected(id: int) -> void:
 func _register_player(new_player_name: String) -> void:
 	var new_player_id := multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_name
-
-
-@rpc("call_local", "reliable")
-func get_player_name() -> String:
-	return Global.data.player_name
 
 
 func _on_player_disconnected(id: int) -> void:

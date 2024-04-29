@@ -57,13 +57,13 @@ func spawn_enemy() -> void:
 	empty_enemy_spawn_areas.shuffle()
 	var spawn_area := empty_enemy_spawn_areas.front() as SpawnArea
 	var enemy := ENEMY.instantiate() as Enemy
-	_enemy_queue -= 1
-	_enemy_count += 1
+	enemy.position = spawn_area.collision_shape_3d.global_position
 	enemy.name = str("enemy%s" % _enemy_count)
 	enemy.destroyed.connect(_on_enemy_destroyed)
-	enemy.position = spawn_area.collision_shape_3d.global_position
 	enemy.max_hp = _wave
 	add_child(enemy)
+	_enemy_queue -= 1
+	_enemy_count += 1
 	update_enemy_count.rpc(current_enemies())
 
 

@@ -92,7 +92,6 @@ func destroy() -> void:
 	remove_from_group("enemies")
 	speed = 0
 	hover_height = -1
-	collision_layer = 3
 	enemy_hp_bar.hide()
 	death_sound_player.play()
 	await get_tree().create_timer(1).timeout

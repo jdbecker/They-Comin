@@ -20,8 +20,7 @@ signal cheat_queue_wave
 @onready var message: Label = %Message as Label
 @onready var enemies_count: Label = %EnemiesCount as Label
 @onready var kill_count_label: Label = %KillCount as Label
-@onready var pistol_animator: AnimationPlayer = $Camera3D/HandSlot/PistolAnimator
-@onready var laser_sound_player: AudioStreamPlayer3D = $Camera3D/HandSlot/LaserSoundPlayer
+@onready var gun: Gun = $Camera3D/HandSlot/Gun
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -47,8 +46,11 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	ui.hide()
-	if not is_multiplayer_authority(): return
-
+	
+	if not is_multiplayer_authority():
+		ready.connect(func() -> void: broadcast_gun_stats.rpc_id(name.to_int()))
+		return
+	
 	# Get mouse input
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
@@ -57,6 +59,8 @@ func _ready() -> void:
 	
 	label.text = Global.data.player_name
 	label.hide()
+	
+	broadcast_gun_stats()
 	
 	respawn()
 
@@ -77,6 +81,8 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("exit"):
 		menu()
+	
+	if pause_menu.visible: return
 	
 	if event.is_action_pressed("interact"):
 		interact()
@@ -121,7 +127,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor() and not pause_menu.visible:
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
@@ -130,7 +136,7 @@ func _physics_process(delta: float) -> void:
 	
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
-	if direction:
+	if direction and not pause_menu.visible:
 		if Input.is_action_pressed("sprint") and Input.is_action_pressed("move_forward") and is_on_floor():
 			velocity.x = lerp(velocity.x, direction.x * SPEED * SPRINT_MULTI, INERTIA)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * SPRINT_MULTI, INERTIA)
@@ -150,6 +156,15 @@ func _physics_process(delta: float) -> void:
 func _set_kill_count(value: int) -> void:
 	kill_count = value
 	kill_count_label.text = str(value)
+
+
+@rpc("any_peer", "reliable")
+func broadcast_gun_stats() -> void:
+	if not is_node_ready():
+		await ready
+	assert(Global.data.gun_in_hand, "Gun in hand is missing!")
+	var stats := Global.data.gun_in_hand
+	gun.set_gun_stats.rpc(stats.type, stats.hitscan, stats.damage, stats.rate_of_fire)
 
 
 func respawn() -> void:
@@ -174,28 +189,20 @@ func add_kill() -> void:
 
 
 func interact() -> void:
-	var object := reach_raycast.get_collider() as Node
-	if object and object.is_in_group("guns"):
-		var gun := object.duplicate() as RigidBody3D
-		gun.freeze = true
-		gun.transform = Transform3D.IDENTITY
-		hand_slot.add_child(gun)
+	pass
+	#var object := reach_raycast.get_collider() as Node
+	#if object and object.is_in_group("guns"):
+		#var gun := object.duplicate() as RigidBody3D
+		#gun.freeze = true
+		#gun.transform = Transform3D.IDENTITY
+		#hand_slot.add_child(gun)
 
 
 func trigger() -> void:
-	if hand_slot.get_child_count() <= 0:
-		print("Nothing in hand to trigger!")
-	else:
-		if not pistol_animator.is_playing():
-			gun_effect.rpc()
-			var gun: Gun = hand_slot.get_children().front() as Gun
-			gun.trigger(shoot_raycast)
-
-
-@rpc("call_local")
-func gun_effect() -> void:
-	pistol_animator.play("gun_fire")
-	laser_sound_player.play()
+	assert(gun, "Nothing in hand to trigger!")
+	if not gun.pistol_animator.is_playing():
+		gun.effects.rpc()
+		gun.trigger(shoot_raycast)
 
 
 func menu() -> void:

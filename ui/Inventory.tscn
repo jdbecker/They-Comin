@@ -1,0 +1,111 @@
+[gd_scene load_steps=5 format=3 uid="uid://nyu5bicf7y5d"]
+
+[ext_resource type="PackedScene" uid="uid://tf6wx6hp0fg0" path="res://guns/gun_thumbnail.tscn" id="1_1sew0"]
+[ext_resource type="Script" path="res://ui/inventory.gd" id="1_gwdhf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kotgn"]
+font_size = 100
+outline_size = 18
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_66ag6"]
+font_size = 100
+outline_size = 18
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Inventory" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gwdhf")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Equipped"
+label_settings = SubResource("LabelSettings_kotgn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EquippedGunContainer" type="CenterContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquippedGunThumbnail" parent="MarginContainer/HBoxContainer/VBoxContainer2/EquippedGunContainer" instance=ExtResource("1_1sew0")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Inventory"
+label_settings = SubResource("LabelSettings_66ag6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+vertical_scroll_mode = 2
+
+[node name="GunInventoryContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+columns = 5
+
+[node name="GunThumnail2" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail3" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail4" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail5" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail6" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail7" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail8" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail9" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail10" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
+
+[node name="GunThumnail11" parent="MarginContainer/HBoxContainer/VBoxContainer/ScrollContainer/GunInventoryContainer" instance=ExtResource("1_1sew0")]
+layout_mode = 2
