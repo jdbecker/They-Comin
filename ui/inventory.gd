@@ -12,13 +12,9 @@ func _ready() -> void:
 	for child in gun_inventory_container.get_children():
 		gun_inventory_container.remove_child(child)
 	
-	var equipped_gun: Gun = GUN.instantiate() as Gun
-	equipped_gun.stats = Global.data.gun_in_hand
-	equipped_gun_thumbnail.gun = equipped_gun
+	equipped_gun_thumbnail.gun_stats = Global.data.gun_in_hand
 	
 	for gun_stats: GunStats in Global.data.guns_in_inventory:
-		var gun: Gun = GUN.instantiate() as Gun
-		gun.stats = gun_stats
 		var gun_thumbnail: GunThumbnail = GUN_THUMBNAIL.instantiate()
-		gun_thumbnail.gun = gun
+		gun_thumbnail.gun_stats = gun_stats
 		gun_inventory_container.add_child(gun_thumbnail)

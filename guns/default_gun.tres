@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GunStats" load_steps=2 format=3 uid="uid://doo6a0o1jcj2i"]
+
+[ext_resource type="Script" path="res://resources/gun_stats.gd" id="1_0ypw6"]
+
+[resource]
+script = ExtResource("1_0ypw6")
+type = 0
+hitscan = true
+damage = 1
+rate_of_fire = 1.0
