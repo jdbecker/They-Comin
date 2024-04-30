@@ -84,18 +84,18 @@ func shot() -> void:
 	current_hp -= 1
 	if current_hp <= 0:
 		destroyed.emit(multiplayer.get_remote_sender_id())
-		destroy.rpc()
+		destroy_effect.rpc()
+		remove_from_group("enemies")
+		speed = 0
+		hover_height = -1
+		enemy_hp_bar.hide()
+		await get_tree().create_timer(1).timeout
+		queue_free()
 
 
 @rpc("call_local")
-func destroy() -> void:
-	remove_from_group("enemies")
-	speed = 0
-	hover_height = -1
-	enemy_hp_bar.hide()
+func destroy_effect() -> void:
 	death_sound_player.play()
-	await get_tree().create_timer(1).timeout
-	queue_free()
 
 
 func _set_max_hp(value: int) -> void:

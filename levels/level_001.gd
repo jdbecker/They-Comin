@@ -48,11 +48,8 @@ func add_player(id: int) -> void:
 func spawn_enemy() -> void:
 	var enemy_spawn_areas := get_tree().get_nodes_in_group("enemy_spawn")
 	var empty_enemy_spawn_areas := enemy_spawn_areas.filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
-	if empty_enemy_spawn_areas.is_empty():
-		print("Waiting for free space to spawn enemy...")
-		return
-	if current_enemies() >= MAX_ENEMIES:
-		#print("Too many enemies on the field")
+	if empty_enemy_spawn_areas.is_empty() or current_enemies() >= MAX_ENEMIES:
+		# Waiting for free space to spawn enemy...
 		return
 	empty_enemy_spawn_areas.shuffle()
 	var spawn_area := empty_enemy_spawn_areas.front() as SpawnArea
