@@ -59,6 +59,7 @@ func spawn_enemy() -> void:
 	enemy.destroyed.connect(_on_enemy_destroyed)
 	enemy.max_hp = _wave
 	add_child(enemy)
+	enemy.add_to_group("enemies")
 	_enemy_queue -= 1
 	_enemy_count += 1
 	update_enemy_count.rpc(current_enemies())
@@ -121,9 +122,11 @@ func update_enemies() -> void:
 
 func _on_arena_area_body_exited(body: Node3D) -> void:
 	if not is_multiplayer_authority(): return
+
 	var player := body as Player
 	if player and not arena_area.has_overlapping_bodies():
 		reset()
+		return
 
 
 func _on_arena_area_body_entered(body: Node3D) -> void:
@@ -156,7 +159,7 @@ func start_wave() -> void:
 	for i: int in range(10, 0, -1):
 		message_players("Wave %s starting\nin %s seconds" % [_wave, i])
 		await get_tree().create_timer(1).timeout
-	message_players("Here they come!")
+	message_players("They comin!")
 	window.close()
 	_enemy_queue += 36
 
@@ -164,4 +167,6 @@ func start_wave() -> void:
 func _on_enemy_arena_area_body_exited(body: Node3D) -> void:
 	var enemy: Enemy = body as Enemy
 	if enemy:
+		if not enemy.is_in_group("enemies"):
+			enemy.add_to_group("enemies")
 		update_enemies.call_deferred()
