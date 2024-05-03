@@ -17,7 +17,6 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [node name="Tooltip" type="Control"]
-z_index = 1
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 0

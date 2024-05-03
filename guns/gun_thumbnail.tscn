@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://tf6wx6hp0fg0"]
+[gd_scene load_steps=8 format=3 uid="uid://tf6wx6hp0fg0"]
 
 [ext_resource type="Script" path="res://guns/gun_thumbnail.gd" id="1_dkuma"]
 [ext_resource type="Environment" uid="uid://dsay4gdr8k6ur" path="res://environment/WE_test.tres" id="1_r0kvf"]
 [ext_resource type="Resource" uid="uid://doo6a0o1jcj2i" path="res://guns/default_gun.tres" id="2_66qus"]
 [ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/gun.tscn" id="3_posjq"]
-[ext_resource type="PackedScene" uid="uid://bot70pf4ogavc" path="res://guns/tooltip.tscn" id="5_112um"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qay2u"]
 border_width_left = 4
@@ -42,10 +41,6 @@ size = Vector2i(172, 172)
 render_target_update_mode = 4
 
 [node name="Gun" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_posjq")]
-
-[node name="Tooltip" parent="." instance=ExtResource("5_112um")]
-visible = false
-layout_mode = 2
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_mask = 0
