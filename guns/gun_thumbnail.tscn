@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://tf6wx6hp0fg0"]
+[gd_scene load_steps=9 format=3 uid="uid://tf6wx6hp0fg0"]
 
 [ext_resource type="Script" path="res://guns/gun_thumbnail.gd" id="1_dkuma"]
 [ext_resource type="Environment" uid="uid://dsay4gdr8k6ur" path="res://environment/WE_test.tres" id="1_r0kvf"]
 [ext_resource type="Resource" uid="uid://doo6a0o1jcj2i" path="res://guns/default_gun.tres" id="2_66qus"]
 [ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/gun.tscn" id="3_posjq"]
+[ext_resource type="PackedScene" uid="uid://bot70pf4ogavc" path="res://guns/tooltip.tscn" id="5_112um"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qay2u"]
 border_width_left = 4
@@ -15,18 +16,23 @@ border_color = Color(0, 0, 0, 1)
 [sub_resource type="World3D" id="World3D_jsk4b"]
 environment = ExtResource("1_r0kvf")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dclk3"]
+size = Vector2(170, 170)
+
 [node name="GunThumnail" type="PanelContainer"]
 custom_minimum_size = Vector2(180, 180)
 offset_right = 180.0
 offset_bottom = 180.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qay2u")
 script = ExtResource("1_dkuma")
 gun_stats = ExtResource("2_66qus")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 2
+mouse_filter = 2
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
@@ -36,3 +42,18 @@ size = Vector2i(172, 172)
 render_target_update_mode = 4
 
 [node name="Gun" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_posjq")]
+
+[node name="Tooltip" parent="." instance=ExtResource("5_112um")]
+visible = false
+layout_mode = 2
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(90, 90)
+shape = SubResource("RectangleShape2D_dclk3")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

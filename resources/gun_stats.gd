@@ -9,5 +9,9 @@ enum GunType { PISTOL }
 @export var rate_of_fire: float = 1.0
 
 
+func type_name() -> String:
+	return GunType.keys()[type]
+
+
 func _to_string() -> String:
 	return "{type: %s, hitscan: %s, damage: %s, rate_of_fire: %s}" % [type, hitscan, damage, rate_of_fire]
