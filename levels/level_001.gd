@@ -116,7 +116,7 @@ func _on_enemy_destroyed(by: int) -> void:
 	if player:
 		player.add_kill.rpc_id(by)
 		if randf() < DROP_CHANCE:
-			player.get_gun.rpc_id(by, GunStats.random_gun(_wave))
+			player.get_gun.rpc_id(by, _wave)
 
 
 func update_enemies() -> void:

@@ -61,5 +61,6 @@ texture = SubResource("ViewportTexture_mri06")
 [node name="DeathSoundPlayer" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 stream = ExtResource("4_2e76d")
+volume_db = -5.0
 max_db = 2.0
 max_polyphony = 3

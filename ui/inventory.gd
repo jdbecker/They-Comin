@@ -23,3 +23,5 @@ func redraw_inventory() -> void:
 		var gun_thumbnail: GunThumbnail = GUN_THUMBNAIL.instantiate()
 		gun_thumbnail.gun_stats = gun_stats
 		gun_inventory_container.add_child(gun_thumbnail)
+	
+	print("%s guns in inventory!" % Global.data.guns_in_inventory.size())

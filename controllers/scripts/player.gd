@@ -204,8 +204,8 @@ func add_kill() -> void:
 
 
 @rpc("any_peer", "call_local", "reliable")
-func get_gun(gun_stats: GunStats) -> void:
-	Global.data.guns_in_inventory.append(gun_stats)
+func get_gun(level: int) -> void:
+	Global.data.guns_in_inventory.append(GunStats.random_gun(level))
 	Global.data.save_data()
 
 
