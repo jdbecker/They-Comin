@@ -21,6 +21,7 @@ signal cheat_queue_wave
 @onready var enemies_count: Label = %EnemiesCount as Label
 @onready var kill_count_label: Label = %KillCount as Label
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
+@onready var inventory: Inventory = %Inventory
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -61,6 +62,7 @@ func _ready() -> void:
 	label.hide()
 	
 	broadcast_gun_stats()
+	Events.equipped_gun_changed.connect(broadcast_gun_stats)
 	
 	respawn()
 
@@ -80,9 +82,27 @@ func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if event.is_action_pressed("exit"):
-		menu()
+		if inventory.visible:
+			toggle_inventory()
+		else:
+			menu()
 	
-	if pause_menu.visible: return
+	if event.is_action_pressed("inventory") and not pause_menu.visible:
+		toggle_inventory()
+
+	if event.is_action_pressed("cheat_kill") and Global.data.player_name == "json":
+		cheat_kill()
+	
+	if event.is_action_pressed("spawn_wave") and Global.data.player_name == "json":
+		cheat_queue_wave.emit()
+	
+	if event.is_action_pressed("cheat_get_gun") and Global.data.player_name == "json":
+		print("cheat get gun")
+		Global.data.guns_in_inventory.append(GunStats.random_gun(2))
+		Events.inventory_changed.emit()
+		Global.data.save_data()
+	
+	if pause_menu.visible or inventory.visible: return
 	
 	if event.is_action_pressed("interact"):
 		interact()
@@ -90,11 +110,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("trigger"):
 		trigger()
 	
-	if event.is_action_pressed("cheat_kill") and Global.data.player_name == "json":
-		cheat_kill()
-	
-	if event.is_action_pressed("spawn_wave") and Global.data.player_name == "json":
-		cheat_queue_wave.emit()
 
 
 func _update_camera(delta: float) -> void:
@@ -183,9 +198,15 @@ func update_enemies_count(count: int) -> void:
 	enemies_count.text = str(count)
 
 
-@rpc("call_local", "any_peer")
+@rpc("call_local", "any_peer", "reliable")
 func add_kill() -> void:
 	kill_count += 1
+
+
+@rpc("any_peer", "call_local", "reliable")
+func get_gun(gun_stats: GunStats) -> void:
+	Global.data.guns_in_inventory.append(gun_stats)
+	Global.data.save_data()
 
 
 func interact() -> void:
@@ -215,10 +236,21 @@ func menu() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
+func toggle_inventory() -> void:
+	if not is_multiplayer_authority(): return
+	if inventory.visible:
+		inventory.hide()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
+		inventory.redraw_inventory()
+		inventory.show()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
 func cheat_kill() -> void:
 	var enemy := get_tree().get_nodes_in_group("enemies").front() as Enemy
 	if enemy:
-		enemy.shot.rpc_id(1)
+		enemy.shot.rpc_id(1, gun.stats.damage)
 
 
 func _on_quit_button_pressed() -> void:

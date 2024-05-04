@@ -1,0 +1,200 @@
+[gd_scene load_steps=11 format=3 uid="uid://bfr2ndh82ceqs"]
+
+[ext_resource type="Script" path="res://ui/selected_gun_dialogue.gd" id="1_t3sf2"]
+[ext_resource type="PackedScene" uid="uid://drcr05i5m1g2b" path="res://ui/gun_stats_panel.tscn" id="1_vm4pw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u1fe1"]
+bg_color = Color(0, 0, 0, 0.705882)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ssbac"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cwbpf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gw3tj"]
+font_size = 60
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6x0m"]
+bg_color = Color(0.192157, 0.415686, 0.196078, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.435294, 0.317647, 0.211765, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+shadow_color = Color(0.352941, 0.352941, 0.352941, 1)
+shadow_size = 1
+shadow_offset = Vector2(-5, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1n1ut"]
+bg_color = Color(0.258824, 0.545098, 0.262745, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.435294, 0.317647, 0.211765, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+shadow_color = Color(0.352941, 0.352941, 0.352941, 1)
+shadow_size = 1
+shadow_offset = Vector2(-5, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbwnf"]
+bg_color = Color(0.588235, 0.223529, 0.152941, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.435294, 0.317647, 0.211765, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+shadow_color = Color(0.352941, 0.352941, 0.352941, 1)
+shadow_size = 1
+shadow_offset = Vector2(-5, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_by7x5"]
+bg_color = Color(0.780392, 0.321569, 0.235294, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.435294, 0.317647, 0.211765, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+shadow_color = Color(0.352941, 0.352941, 0.352941, 1)
+shadow_size = 1
+shadow_offset = Vector2(-5, 5)
+
+[node name="SelectedGunDialogue" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u1fe1")
+script = ExtResource("1_t3sf2")
+
+[node name="CancelButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -53.0
+offset_right = -14.0
+offset_bottom = 77.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.435294, 0.0784314, 0.0784314, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ssbac")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_cwbpf")
+text = "X"
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -366.0
+offset_top = -205.0
+offset_right = 366.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
+
+[node name="EquippedWeaponLabel" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Equipped"
+label_settings = SubResource("LabelSettings_gw3tj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectedWeaponLabel" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Selected"
+label_settings = SubResource("LabelSettings_gw3tj")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="EquippedGunStatsPanel" parent="GridContainer" instance=ExtResource("1_vm4pw")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="SelectedGunStatsPanel" parent="GridContainer" instance=ExtResource("1_vm4pw")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = 224.0
+offset_right = 215.0
+offset_bottom = 313.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 120
+
+[node name="EquipButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_l6x0m")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1n1ut")
+text = "Equip"
+
+[node name="ScrapButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_lbwnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_by7x5")
+text = "Scrap"
+
+[connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/EquipButton" to="." method="_on_equip_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ScrapButton" to="." method="_on_scrap_button_pressed"]

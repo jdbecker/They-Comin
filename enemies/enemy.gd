@@ -80,8 +80,8 @@ func distance_to(target: Vector3) -> float:
 
 
 @rpc("any_peer", "call_local")
-func shot() -> void:
-	current_hp -= 1
+func shot(damage: int) -> void:
+	current_hp -= damage
 	if current_hp <= 0:
 		destroyed.emit(multiplayer.get_remote_sender_id())
 		destroy_effect.rpc()

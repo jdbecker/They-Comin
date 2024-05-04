@@ -1,7 +1,6 @@
 class_name Inventory
 extends PanelContainer
 
-const GUN = preload("res://guns/gun.tscn")
 const GUN_THUMBNAIL = preload("res://guns/gun_thumbnail.tscn")
 
 @onready var gun_inventory_container: GridContainer = %GunInventoryContainer
@@ -9,6 +8,12 @@ const GUN_THUMBNAIL = preload("res://guns/gun_thumbnail.tscn")
 
 
 func _ready() -> void:
+	Events.inventory_changed.connect(redraw_inventory)
+	Events.equipped_gun_changed.connect(redraw_inventory)
+	redraw_inventory()
+
+
+func redraw_inventory() -> void:
 	for child in gun_inventory_container.get_children():
 		gun_inventory_container.remove_child(child)
 	

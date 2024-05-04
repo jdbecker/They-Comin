@@ -1,12 +1,16 @@
 extends Node3D
 
+enum GameState {WAITING_FOR_PLAYERS, COUNTING_DOWN, THEY_COMIN}
+
 const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
-const MAX_ENEMIES = 200
+const MAX_ENEMIES := 200
+const DROP_CHANCE := 0.10
 
 var _enemy_queue: int = 0
 var _enemy_count: int = 0
 var _wave: int = 0
+var _game_state: GameState = GameState.WAITING_FOR_PLAYERS
 
 @onready var menu: Menu = $Menu as Menu
 @onready var arena_area: Area3D = $PlayerArenaArea as Area3D
@@ -99,6 +103,7 @@ func server_disconnected() -> void:
 
 func reset() -> void:
 	if not is_multiplayer_authority(): return
+	_game_state = GameState.WAITING_FOR_PLAYERS
 	_enemy_queue = 0
 	_wave = 0
 	get_tree().call_group("enemies", "queue_free")
@@ -110,6 +115,8 @@ func _on_enemy_destroyed(by: int) -> void:
 	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
 	if player:
 		player.add_kill.rpc_id(by)
+		if randf() < DROP_CHANCE:
+			player.get_gun.rpc_id(by, GunStats.random_gun(_wave))
 
 
 func update_enemies() -> void:
@@ -153,7 +160,8 @@ func message_players(message: String) -> void:
 
 
 func start_wave() -> void:
-	if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority() or _game_state == GameState.COUNTING_DOWN: return
+	_game_state = GameState.COUNTING_DOWN
 	window.open()
 	_wave += 1
 	for i: int in range(10, 0, -1):
@@ -162,6 +170,7 @@ func start_wave() -> void:
 	message_players("They comin!")
 	window.close()
 	_enemy_queue += 36
+	_game_state = GameState.THEY_COMIN
 
 
 func _on_enemy_arena_area_body_exited(body: Node3D) -> void:

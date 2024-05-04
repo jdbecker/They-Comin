@@ -1,10 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://nyu5bicf7y5d"]
+[gd_scene load_steps=5 format=3 uid="uid://nyu5bicf7y5d"]
 
 [ext_resource type="PackedScene" uid="uid://tf6wx6hp0fg0" path="res://guns/gun_thumbnail.tscn" id="1_1sew0"]
 [ext_resource type="Script" path="res://ui/inventory.gd" id="1_gwdhf"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b50sy"]
-bg_color = Color(0.172549, 0.172549, 0.172549, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_kotgn"]
 font_size = 100
@@ -23,7 +20,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_b50sy")
 script = ExtResource("1_gwdhf")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
