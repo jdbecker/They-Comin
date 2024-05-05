@@ -56,8 +56,30 @@ jobs:
 
       - name: Open Godot editor for reimport
         timeout-minutes: 1
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/initialize.gd --headless --verbose --quit || true
+        run: ${{ steps.install-godot.outputs.godot-executable }} --editor --headless --quit | echo "nop" || true
 
       - name: Run project validations
         timeout-minutes: 1
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless --verbose --quit
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless --quit
+
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Install Godot
+        id: install-godot
+        uses: CapsCollective/godot-actions/install-godot@v1.0
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+          install-templates: true
+
+      - name: Open Godot editor for reimport
+        timeout-minutes: 1
+        run: ${{ steps.install-godot.outputs.godot-executable }} --editor --headless --quit | echo "nop" || true
+
+      - name: Build and upload artifacts for all platforms
+        uses: CapsCollective/godot-actions/build-godot@v1.0
+        with:
+          godot-executable: ${{ steps.install-godot.outputs.godot-executable }}
