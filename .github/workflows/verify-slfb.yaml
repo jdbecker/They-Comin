@@ -55,7 +55,7 @@ jobs:
           godot-version: ${{ env.GODOT_VERSION }}
 
       - name: Open Godot editor for reimport
-        run: ${{ steps.install-godot.outputs.godot-executable }} --editor --headless --quit || true
+        run: timeout 5m ${{ steps.install-godot.outputs.godot-executable }} --editor --headless --quit || true
 
       # - name: Run project validations
       #   run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/run_validations.gd --headless
