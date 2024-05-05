@@ -1,13 +1,13 @@
 name: Verify Feature Branch
 
 on:
-    pull_request:
-      branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
 
 env:
-GODOT_VERSION: 4.2.1
-VERSION_FILE: project.godot
-VERSION_REGEX: config\/version=\"\K[0-9.\-A-z]*
+  GODOT_VERSION: 4.2.1
+  VERSION_FILE: project.godot
+  VERSION_REGEX: config\/version=\"\K[0-9.\-A-z]*
 
 jobs:
   check-version-bump:
