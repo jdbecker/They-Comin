@@ -63,6 +63,7 @@ jobs:
         run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless --quit
 
   build:
+    needs: run-project-validation
     runs-on: macos-latest
     steps:
       - name: Checkout current branch
