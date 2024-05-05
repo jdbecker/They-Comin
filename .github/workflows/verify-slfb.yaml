@@ -59,4 +59,5 @@ jobs:
       #   run: ${{ steps.install-godot.outputs.godot-executable }} --editor --headless --verbose --quit || true
 
       - name: Run project validations
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless
+        timeout-minutes: 5
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless --verbose
