@@ -43,6 +43,7 @@ jobs:
 
   export-windows:
     name: Windows Export
+    needs: check-version-bump
     runs-on: ubuntu-20.04
     container:
       image: barichello/godot-ci:4.2.1
@@ -60,8 +61,7 @@ jobs:
       - name: Windows Build
         run: |
           mkdir -v -p build/windows
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Windows Desktop" ../build/windows/$EXPORT_NAME.exe
+          godot --headless --verbose --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME.exe
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
