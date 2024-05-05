@@ -46,6 +46,10 @@ project/assembly_name="001 - Basic Setup"
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
+[filesystem]
+
+import/version="0.1.1"
+
 [input]
 
 move_forward={
