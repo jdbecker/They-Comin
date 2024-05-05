@@ -56,11 +56,11 @@ jobs:
 
       - name: Open Godot editor for reimport
         timeout-minutes: 1
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/initialize.gd --headless --quit || true
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/initialize.gd --headless --quit || true
 
       - name: Run project validations
         timeout-minutes: 1
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/test.gd --headless --quit
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/test.gd --headless --quit
 
   build:
     needs: run-project-validation
@@ -78,7 +78,7 @@ jobs:
 
       - name: Open Godot editor for reimport
         timeout-minutes: 1
-        run: ${{ steps.install-godot.outputs.godot-executable }} --script test/initialize.gd --headless --quit || true
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/initialize.gd --headless --quit || true
 
       - name: Build and upload artifacts for all platforms
         uses: CapsCollective/godot-actions/build-godot@v1.0
