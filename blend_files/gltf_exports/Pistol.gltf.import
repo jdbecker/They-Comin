@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bpmiow6rlq2as"
-path="res://.godot/imported/Pistol.gltf-8352eed34524d5a889c1efb204cff071.scn"
+path="res://.godot/imported/Pistol.gltf-d1737f90e1da14cc214f4e652d407ba8.scn"
 
 [deps]
 
-source_file="res://blend_files/gltf/Pistol.gltf"
-dest_files=["res://.godot/imported/Pistol.gltf-8352eed34524d5a889c1efb204cff071.scn"]
+source_file="res://blend_files/gltf_exports/Pistol.gltf"
+dest_files=["res://.godot/imported/Pistol.gltf-d1737f90e1da14cc214f4e652d407ba8.scn"]
 
 [params]
 

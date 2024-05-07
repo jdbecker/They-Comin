@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dim3doxntw8sx"
-path="res://.godot/imported/Environment.gltf-7014aea5e85c47dfdd04dcb6d5203e7a.scn"
+path="res://.godot/imported/Environment.gltf-c392d7482f1f3d9451eddfaf6668c691.scn"
 
 [deps]
 
-source_file="res://blend_files/gltf/Environment.gltf"
-dest_files=["res://.godot/imported/Environment.gltf-7014aea5e85c47dfdd04dcb6d5203e7a.scn"]
+source_file="res://blend_files/gltf_exports/Environment.gltf"
+dest_files=["res://.godot/imported/Environment.gltf-c392d7482f1f3d9451eddfaf6668c691.scn"]
 
 [params]
 
