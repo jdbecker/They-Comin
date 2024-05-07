@@ -1,0 +1,68 @@
+name: Verify Feature Branch
+
+on:
+  pull_request:
+    branches: [ 'main' ]
+
+env:
+  GODOT_VERSION: 4.2.1
+  VERSION_FILE: project.godot
+  VERSION_REGEX: config\/version=\"\K[0-9.\-A-z]*
+
+jobs:
+  check-version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Checkout main branch
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: ${{ github.base_ref }}
+
+      # - name: Extract old version string
+      #   id: extract-version-old
+      #   uses: CapsCollective/version-actions/extract-version@v1.0
+      #   with:
+      #     version-file: ${{ env.VERSION_FILE }}
+      #     version-regex: ${{ env.VERSION_REGEX }}
+
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Extract new version string
+        id: extract-version-new
+        uses: CapsCollective/version-actions/extract-version@v1.0
+        with:
+          version-file: ${{ env.VERSION_FILE }}
+          version-regex: ${{ env.VERSION_REGEX }}
+
+      - name: Check semantic version bump
+        uses: CapsCollective/version-actions/check-version-bump@v1.0
+        with:
+          new-version: ${{ steps.extract-version-new.outputs.version-string }}
+          old-version: "0.0.0" # ${{ steps.extract-version-old.outputs.version-string }}
+
+  export-windows:
+    name: Windows Export
+    needs: check-version-bump
+    runs-on: ubuntu-20.04
+    container:
+      image: barichello/godot-ci:4.2.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Setup
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/
+          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+      - name: Windows Build
+        run: |
+          mkdir -v -p build/windows
+          godot --headless --verbose --export-release "Windows Desktop" "build/windows/They Comin.exe"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: windows
+          path: build/windows
