@@ -13,17 +13,17 @@ jobs:
   check-version-bump:
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout main branch
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.base_ref }}
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
 
-      # - name: Extract old version string
-      #   id: extract-version-old
-      #   uses: CapsCollective/version-actions/extract-version@v1.0
-      #   with:
-      #     version-file: ${{ env.VERSION_FILE }}
-      #     version-regex: ${{ env.VERSION_REGEX }}
+      - name: Extract old version string
+        id: extract-version-old
+        uses: CapsCollective/version-actions/extract-version@v1.0
+        with:
+          version-file: ${{ env.VERSION_FILE }}
+          version-regex: ${{ env.VERSION_REGEX }}
 
       - name: Checkout current branch
         uses: actions/checkout@v3
@@ -39,4 +39,4 @@ jobs:
         uses: CapsCollective/version-actions/check-version-bump@v1.0
         with:
           new-version: ${{ steps.extract-version-new.outputs.version-string }}
-          old-version: "0.0.0" # ${{ steps.extract-version-old.outputs.version-string }}
+          old-version: ${{ steps.extract-version-old.outputs.version-string }}
