@@ -40,29 +40,3 @@ jobs:
         with:
           new-version: ${{ steps.extract-version-new.outputs.version-string }}
           old-version: "0.0.0" # ${{ steps.extract-version-old.outputs.version-string }}
-
-  export-windows:
-    name: Windows Export
-    needs: check-version-bump
-    runs-on: ubuntu-20.04
-    container:
-      image: barichello/godot-ci:4.2.1
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Windows Build
-        run: |
-          mkdir -v -p build/windows
-          godot --headless --verbose --export-release "Windows Desktop" "build/windows/They Comin.exe"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: windows
-          path: build/windows
