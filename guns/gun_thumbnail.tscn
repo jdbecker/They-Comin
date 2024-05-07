@@ -1,9 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://tf6wx6hp0fg0"]
 
 [ext_resource type="Script" path="res://guns/gun_thumbnail.gd" id="1_dkuma"]
-[ext_resource type="Environment" uid="uid://dsay4gdr8k6ur" path="res://environment/WE_test.tres" id="1_r0kvf"]
 [ext_resource type="Resource" uid="uid://doo6a0o1jcj2i" path="res://guns/default_gun.tres" id="2_66qus"]
-[ext_resource type="PackedScene" uid="uid://dbgs8rqmbjevt" path="res://guns/gun.tscn" id="3_posjq"]
+[ext_resource type="PackedScene" uid="uid://bqaxnx8f8fyt" path="res://guns/gun.tscn" id="3_posjq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qay2u"]
 border_width_left = 4
@@ -12,8 +11,14 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color(0, 0, 0, 1)
 
+[sub_resource type="Environment" id="Environment_meavi"]
+background_mode = 1
+background_color = Color(0.47451, 0.47451, 0.47451, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
 [sub_resource type="World3D" id="World3D_jsk4b"]
-environment = ExtResource("1_r0kvf")
+environment = SubResource("Environment_meavi")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dclk3"]
 size = Vector2(170, 170)
