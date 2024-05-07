@@ -79,7 +79,7 @@ func distance_to(target: Vector3) -> float:
 	return global_transform.origin.distance_to(target)
 
 
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func shot(damage: int) -> void:
 	current_hp -= damage
 	if current_hp <= 0:
