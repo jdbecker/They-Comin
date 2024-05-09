@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://d10j1cwqob44s"]
 
-[ext_resource type="PackedScene" uid="uid://b1kmccfb4wx6y" path="res://blend_files/gltf/window.gltf" id="1_d3yov"]
+[ext_resource type="PackedScene" uid="uid://b1kmccfb4wx6y" path="res://mesh_files/gltf_exports/window.gltf" id="1_d3yov"]
 [ext_resource type="Script" path="res://levels/window.gd" id="2_b0sgf"]
 [ext_resource type="Texture2D" uid="uid://qruay0k2qmea" path="res://addons/kenney_prototype_textures/light/texture_11.png" id="3_h25a7"]
 
