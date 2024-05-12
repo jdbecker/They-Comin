@@ -1,0 +1,1 @@
+'C:\Program Files\Godot\Godot_v4.2.1-stable_mono_win64\Godot_v4.2.1-stable_mono_win64_console.exe' --export-release 'Windows Desktop' they_comin.exe
