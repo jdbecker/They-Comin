@@ -1,16 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://c3ffql15mo0aj"]
+[gd_scene load_steps=11 format=3 uid="uid://c3ffql15mo0aj"]
 
 [ext_resource type="Script" path="res://controllers/scripts/player.gd" id="1_um36a"]
-[ext_resource type="Material" uid="uid://c5hwva5sbrwyg" path="res://materials/player.tres" id="2_gldw4"]
+[ext_resource type="PackedScene" uid="uid://crj31xindmddu" path="res://controllers/floor_lamp/scene.gltf" id="2_ldq1x"]
 [ext_resource type="Texture2D" uid="uid://bkpb2s6yis3v7" path="res://addons/kenney_particle_pack/circle_05.png" id="3_b6wk7"]
 [ext_resource type="PackedScene" uid="uid://nyu5bicf7y5d" path="res://ui/Inventory.tscn" id="4_60qyr"]
 [ext_resource type="PackedScene" uid="uid://bqaxnx8f8fyt" path="res://guns/gun.tscn" id="5_gj683"]
 [ext_resource type="PackedScene" uid="uid://ctkjeo8dec6on" path="res://ui/pause_menu.tscn" id="5_i31rn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6tj1"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6tv51"]
-material = ExtResource("2_gldw4")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vtxxq"]
 
@@ -42,8 +39,10 @@ script = ExtResource("1_um36a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_u6tj1")
 
+[node name="floor_lamp" parent="CollisionShape3D" instance=ExtResource("2_ldq1x")]
+transform = Transform3D(0.915782, 0, 0, 0, 0.915782, 0, 0, 0, 0.915782, 0, 0.032304, 0)
+
 [node name="Mesh" type="MeshInstance3D" parent="CollisionShape3D"]
-mesh = SubResource("CapsuleMesh_6tv51")
 
 [node name="EnemyOverlap" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
