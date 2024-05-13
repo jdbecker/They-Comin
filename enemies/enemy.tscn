@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://ekmf0tgrvv0r"]
 
 [ext_resource type="Script" path="res://enemies/enemy.gd" id="1_0avt6"]
-[ext_resource type="PackedScene" uid="uid://btjoqrudracyg" path="res://enemies/folding_chair/scene.gltf" id="2_x2en1"]
+[ext_resource type="PackedScene" uid="uid://dkqygtwxc7prg" path="res://enemies/industrial_robot/scene.gltf" id="2_2g6wl"]
 [ext_resource type="PackedScene" uid="uid://cg6afyibf4q6c" path="res://enemies/enemy_hp_bar.tscn" id="3_dekwv"]
 [ext_resource type="AudioStream" uid="uid://cxely823wgxl5" path="res://addons/kenney sci-fi sounds/explosion_crunch_000.ogg" id="4_2e76d"]
 
@@ -34,8 +34,8 @@ script = ExtResource("1_0avt6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 layers = 8
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("2_x2en1")]
-transform = Transform3D(0.00101626, 0, 0.000409729, 0, 0.00109575, 0, -0.000409729, 0, 0.00101626, 0, 0.553669, 0)
+[node name="industrial_robot" parent="." instance=ExtResource("2_2g6wl")]
+transform = Transform3D(-7.35953e-08, 0, -1.68366, 0, 1.68366, 0, 1.68366, 0, -7.35953e-08, 0, 1.00428, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

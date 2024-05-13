@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://c3ffql15mo0aj"]
 
 [ext_resource type="Script" path="res://controllers/scripts/player.gd" id="1_um36a"]
-[ext_resource type="PackedScene" uid="uid://crj31xindmddu" path="res://controllers/floor_lamp/scene.gltf" id="2_ldq1x"]
+[ext_resource type="PackedScene" uid="uid://dukmtgueh6ymd" path="res://controllers/low_poly_person/scene.gltf" id="2_ip3pd"]
 [ext_resource type="Texture2D" uid="uid://bkpb2s6yis3v7" path="res://addons/kenney_particle_pack/circle_05.png" id="3_b6wk7"]
 [ext_resource type="PackedScene" uid="uid://nyu5bicf7y5d" path="res://ui/Inventory.tscn" id="4_60qyr"]
 [ext_resource type="PackedScene" uid="uid://bqaxnx8f8fyt" path="res://guns/gun.tscn" id="5_gj683"]
@@ -39,8 +39,8 @@ script = ExtResource("1_um36a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_u6tj1")
 
-[node name="floor_lamp" parent="CollisionShape3D" instance=ExtResource("2_ldq1x")]
-transform = Transform3D(0.915782, 0, 0, 0, 0.915782, 0, 0, 0, 0.915782, 0, 0.032304, 0)
+[node name="low_poly_person" parent="CollisionShape3D" instance=ExtResource("2_ip3pd")]
+transform = Transform3D(-0.0119976, 0, 1.04886e-09, 0, 0.0119976, 0, -1.04886e-09, 0, -0.0119976, 0, -0.974792, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="CollisionShape3D"]
 
@@ -50,6 +50,7 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyOverlap"]
+transform = Transform3D(0.722867, 0, 0, 0, 1, 0, 0, 0, 0.374563, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_vtxxq")
 
 [node name="Camera3D" type="Camera3D" parent="."]
