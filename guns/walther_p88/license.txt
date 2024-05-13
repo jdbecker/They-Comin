@@ -1,0 +1,11 @@
+Model Information:
+* title:	Walther P88 Gun
+* source:	https://sketchfab.com/3d-models/walther-p88-gun-a76d127c7e4a4beba6a50c29f2898fb0
+* author:	Willy Decarpentrie (https://sketchfab.com/skudgee)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Walther P88 Gun" (https://sketchfab.com/3d-models/walther-p88-gun-a76d127c7e4a4beba6a50c29f2898fb0) by Willy Decarpentrie (https://sketchfab.com/skudgee) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

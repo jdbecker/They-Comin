@@ -1,0 +1,11 @@
+Model Information:
+* title:	Industrial Theme Robot
+* source:	https://sketchfab.com/3d-models/industrial-theme-robot-56c7aa071a72437e9e4401718131e2b6
+* author:	Atrin (https://sketchfab.com/itsatrin)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Industrial Theme Robot" (https://sketchfab.com/3d-models/industrial-theme-robot-56c7aa071a72437e9e4401718131e2b6) by Atrin (https://sketchfab.com/itsatrin) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

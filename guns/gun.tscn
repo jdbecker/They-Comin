@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqaxnx8f8fyt"]
+[gd_scene load_steps=10 format=3 uid="uid://bqaxnx8f8fyt"]
 
 [ext_resource type="PackedScene" uid="uid://bpmiow6rlq2as" path="res://mesh_files/gltf_exports/Pistol.gltf" id="1_8fqrv"]
 [ext_resource type="Script" path="res://guns/gun.gd" id="2_1bu7o"]
 [ext_resource type="Script" path="res://resources/gun_stats.gd" id="3_rwpwi"]
 [ext_resource type="AudioStream" uid="uid://bskwat77hn000" path="res://addons/kenney sci-fi sounds/laser_small_000.ogg" id="3_t26jl"]
+[ext_resource type="PackedScene" uid="uid://dp0rf3ys0dfuu" path="res://guns/walther_p88/scene.gltf" id="4_twe2d"]
 
 [sub_resource type="Resource" id="Resource_w4xej"]
 script = ExtResource("3_rwpwi")
@@ -56,6 +57,12 @@ stats = SubResource("Resource_w4xej")
 collision_layer = 0
 collision_mask = 0
 freeze = true
+
+[node name="Pistol-rigid" parent="Pistol-rigid" index="0"]
+mesh = null
+
+[node name="p88" parent="Pistol-rigid/Pistol-rigid" index="0" instance=ExtResource("4_twe2d")]
+transform = Transform3D(-7.31558e-10, 0, -0.0167361, 0, 0.0167361, 0, 0.0167361, 0, -7.31558e-10, 0, -0.138877, -0.0801691)
 
 [node name="PistolAnimator" type="AnimationPlayer" parent="." index="1"]
 libraries = {

@@ -22,6 +22,7 @@ signal cheat_queue_wave
 @onready var kill_count_label: Label = %KillCount as Label
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
 @onready var inventory: Inventory = %Inventory
+@onready var player_poly: Node3D = $CollisionShape3D/low_poly_person
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -51,6 +52,8 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		ready.connect(func() -> void: broadcast_gun_stats.rpc_id(name.to_int()))
 		return
+	
+	player_poly.hide()
 	
 	# Get mouse input
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
