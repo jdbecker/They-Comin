@@ -7,4 +7,4 @@
 *.blend.import
 
 # Windows files
-*.dll
+*.TMP
