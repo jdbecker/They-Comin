@@ -13,17 +13,17 @@ jobs:
   check-version-bump:
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout main branch
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.base_ref }}
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
 
-      # - name: Extract old version string
-      #   id: extract-version-old
-      #   uses: CapsCollective/version-actions/extract-version@v1.0
-      #   with:
-      #     version-file: ${{ env.VERSION_FILE }}
-      #     version-regex: ${{ env.VERSION_REGEX }}
+      - name: Extract old version string
+        id: extract-version-old
+        uses: CapsCollective/version-actions/extract-version@v1.0
+        with:
+          version-file: ${{ env.VERSION_FILE }}
+          version-regex: ${{ env.VERSION_REGEX }}
 
       - name: Checkout current branch
         uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
   export-windows:
     name: Windows Export
     needs: check-version-bump
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
     container:
       image: barichello/godot-ci:4.2.1
     steps:
@@ -59,6 +59,7 @@ jobs:
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
 
       - name: Windows Build
+        timeout-minutes: 60
         run: |
           mkdir -v -p build/windows
           godot --headless --verbose --export-release "Windows Desktop" "build/windows/They Comin.exe"
