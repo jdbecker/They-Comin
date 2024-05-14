@@ -5,3 +5,7 @@
 # Blender temp files
 *.blend1
 *.blend.import
+
+# temp files
+*.TMP
+*editor.dll
