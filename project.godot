@@ -41,10 +41,9 @@ window/stretch/mode="viewport"
 
 project/assembly_name="001 - Basic Setup"
 
-[editor]
+[filesystem]
 
-version_control/plugin_name="GitPlugin"
-version_control/autoload_on_startup=true
+import/blender/enabled=false
 
 [input]
 
