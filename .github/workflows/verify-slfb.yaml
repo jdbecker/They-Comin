@@ -1,4 +1,4 @@
-name: Verify Feature Branch
+name: 'Verify Feature Branch'
 
 on:
   pull_request:
@@ -40,3 +40,47 @@ jobs:
         with:
           new-version: ${{ steps.extract-version-new.outputs.version-string }}
           old-version: ${{ steps.extract-version-old.outputs.version-string }}
+      
+  run-project-validation:
+    needs: check-version-bump
+    runs-on: windows-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Install Godot
+        id: install-godot
+        uses: CapsCollective/godot-actions/install-godot@v1.0
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+
+      - name: Open Godot editor for reimport
+        timeout-minutes: 1
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/initialize.gd --headless --quit || true
+
+      - name: Run project validations
+        timeout-minutes: 1
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/test.gd --headless --quit
+
+  build:
+    needs: run-project-validation
+    runs-on: windows-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Install Godot
+        id: install-godot
+        uses: CapsCollective/godot-actions/install-godot@v1.0
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+          install-templates: true
+
+      - name: Open Godot editor for reimport
+        timeout-minutes: 60
+        run: ${{ steps.install-godot.outputs.godot-executable }} --script scripts/initialize.gd --headless --quit || true
+
+      - name: Build and upload artifacts for all platforms
+        uses: CapsCollective/godot-actions/build-godot@v1.0
+        with:
+          godot-executable: ${{ steps.install-godot.outputs.godot-executable }}
