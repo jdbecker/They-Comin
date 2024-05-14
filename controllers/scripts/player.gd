@@ -144,6 +144,10 @@ func _physics_process(delta: float) -> void:
 	# Handle Jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor() and not pause_menu.visible:
 		velocity.y = JUMP_VELOCITY
+	
+	# Check if stuck intersecting with something else
+	if get_slide_collision_count() > 0:
+		_unstuck()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -166,6 +170,14 @@ func _physics_process(delta: float) -> void:
 		respawn()
 
 	move_and_slide()
+
+
+func _unstuck() -> void:
+	for i in range(get_slide_collision_count()):
+		var collision: KinematicCollision3D = get_slide_collision(i)
+		if collision.get_collider() is Player or collision.get_collider() is EntryWindow:
+			var shunt_vector: Vector3 = collision.get_normal() * .01
+			position = position + shunt_vector
 
 
 func _set_kill_count(value: int) -> void:

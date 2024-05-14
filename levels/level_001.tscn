@@ -1,51 +1,39 @@
-[gd_scene load_steps=16 format=3 uid="uid://b1yleqbb8tc7x"]
+[gd_scene load_steps=12 format=3 uid="uid://b1yleqbb8tc7x"]
 
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" path="res://levels/level_001.gd" id="1_uhsmk"]
-[ext_resource type="PackedScene" uid="uid://1davoxem8gya" path="res://blend_files/Environment.blend" id="2_vg5a5"]
-[ext_resource type="Texture2D" uid="uid://1405507wvtiy" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="3_duo1u"]
+[ext_resource type="PackedScene" uid="uid://dim3doxntw8sx" path="res://mesh_files/gltf_exports/Environment.gltf" id="3_8fvr6"]
 [ext_resource type="Texture2D" uid="uid://bndmfxhrngnai" path="res://addons/kenney_prototype_textures/dark/texture_13.png" id="4_4ltpw"]
+[ext_resource type="Texture2D" uid="uid://bfifrw45qclr1" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="4_4wp8u"]
+[ext_resource type="PackedScene" uid="uid://d10j1cwqob44s" path="res://levels/window.tscn" id="6_60i22"]
 [ext_resource type="PackedScene" uid="uid://bgamdwpujbn1q" path="res://ui/menu.tscn" id="7_8gxd5"]
 [ext_resource type="PackedScene" uid="uid://bqds1ychuwsaf" path="res://levels/spawn_area.tscn" id="8_1irng"]
-[ext_resource type="PackedScene" uid="uid://cbxapk7aah7bp" path="res://blend_files/window.blend" id="8_cqcqs"]
-[ext_resource type="Texture2D" uid="uid://qruay0k2qmea" path="res://addons/kenney_prototype_textures/light/texture_11.png" id="9_lj87h"]
-[ext_resource type="Script" path="res://blend_files/window.gd" id="9_nktim"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w2oay"]
-cull_mode = 2
-albedo_texture = ExtResource("3_duo1u")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ue5o7"]
+albedo_texture = ExtResource("4_4wp8u")
 uv1_triplanar = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sd83s"]
-cull_mode = 2
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wprve"]
 albedo_texture = ExtResource("4_4ltpw")
 uv1_triplanar = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6vamy"]
 size = Vector3(120, 30, 120)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a648w"]
-albedo_texture = ExtResource("9_lj87h")
-uv1_triplanar = true
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ildsq"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-
 [node name="Level_001" type="Node3D"]
 script = ExtResource("1_uhsmk")
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("1_db21n")]
 
-[node name="Environment" parent="." instance=ExtResource("2_vg5a5")]
+[node name="Environment" parent="." instance=ExtResource("3_8fvr6")]
 
 [node name="Plane" parent="Environment" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_w2oay")
-surface_material_override/1 = SubResource("StandardMaterial3D_sd83s")
+cast_shadow = 2
+surface_material_override/0 = SubResource("StandardMaterial3D_ue5o7")
+surface_material_override/1 = SubResource("StandardMaterial3D_wprve")
 
-[node name="StaticBody3D" parent="Environment/Plane" index="0"]
-collision_priority = 9.22337e+18
+[node name="Window" parent="." instance=ExtResource("6_60i22")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.5, -4)
 
 [node name="Menu" parent="." instance=ExtResource("7_8gxd5")]
 
@@ -349,21 +337,9 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyArenaArea"]
 shape = SubResource("BoxShape3D_6vamy")
 
-[node name="Window" parent="." instance=ExtResource("8_cqcqs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 33, -4)
-script = ExtResource("9_nktim")
-
-[node name="Window" parent="Window" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -0.5, 0)
-surface_material_override/0 = SubResource("StandardMaterial3D_a648w")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Window"]
-replication_config = SubResource("SceneReplicationConfig_ildsq")
-
 [connection signal="timeout" from="EnemyPathfindingUpdateTimer" to="." method="_on_enemy_pathfinding_update_timer_timeout"]
 [connection signal="body_entered" from="PlayerArenaArea" to="." method="_on_arena_area_body_entered"]
 [connection signal="body_exited" from="PlayerArenaArea" to="." method="_on_arena_area_body_exited"]
 [connection signal="body_exited" from="EnemyArenaArea" to="." method="_on_enemy_arena_area_body_exited"]
 
 [editable path="Environment"]
-[editable path="Window"]
