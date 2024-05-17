@@ -1,8 +1,6 @@
 class_name Player
 extends CharacterBody3D
 
-signal cheat_queue_wave
-
 @export var SPEED : float = 5.0
 @export var SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
@@ -22,6 +20,7 @@ signal cheat_queue_wave
 @onready var kill_count_label: Label = %KillCount as Label
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
 @onready var inventory: Inventory = %Inventory
+@onready var debug_panel: DebugPanel = $Camera3D/UI/DebugPanel
 
 const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 const TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -90,19 +89,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory") and not pause_menu.visible:
 		toggle_inventory()
 
-	if event.is_action_pressed("cheat_kill") and Global.data.player_name == "json":
-		cheat_kill()
+	if event.is_action_pressed("cheat") and Global.data.player_name == "json":
+		toggle_debug()
 	
-	if event.is_action_pressed("spawn_wave") and Global.data.player_name == "json":
-		cheat_queue_wave.emit()
-	
-	if event.is_action_pressed("cheat_get_gun") and Global.data.player_name == "json":
-		print("cheat get gun")
-		Global.data.guns_in_inventory.append(GunStats.random_gun(2))
-		Events.inventory_changed.emit()
-		Global.data.save_data()
-	
-	if pause_menu.visible or inventory.visible: return
+	if pause_menu.visible or inventory.visible or debug_panel.visible: return
 	
 	if event.is_action_pressed("interact"):
 		interact()
@@ -256,6 +246,16 @@ func toggle_inventory() -> void:
 	else:
 		inventory.redraw_inventory()
 		inventory.show()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
+func toggle_debug() -> void:
+	if not is_multiplayer_authority(): return
+	if debug_panel.visible:
+		debug_panel.hide()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
+		debug_panel.show()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
