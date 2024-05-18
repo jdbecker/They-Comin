@@ -33,7 +33,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ue5o7")
 surface_material_override/1 = SubResource("StandardMaterial3D_wprve")
 
 [node name="Window" parent="." instance=ExtResource("6_60i22")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.5, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.5, 0)
 
 [node name="Menu" parent="." instance=ExtResource("7_8gxd5")]
 

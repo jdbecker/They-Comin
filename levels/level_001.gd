@@ -27,12 +27,8 @@ func _ready() -> void:
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
-
-
-func _input(event: InputEvent) -> void:
-	if not is_multiplayer_authority(): return
-	if event.is_action_pressed("interact"):
-		window.toggle()
+	
+	window.state = EntryWindow.STATE.OPEN
 
 
 func _physics_process(_delta: float) -> void:
@@ -44,7 +40,6 @@ func _physics_process(_delta: float) -> void:
 func add_player(id: int) -> void:
 	var player := PLAYER.instantiate() as Player
 	player.name = str(id)
-	player.cheat_queue_wave.connect(func() -> void: _enemy_queue += 36)
 	player.position.y = 34
 	add_child(player)
 
@@ -108,7 +103,7 @@ func reset() -> void:
 	_wave = 0
 	get_tree().call_group("enemies", "queue_free")
 	update_enemy_count.rpc(0)
-	window.open()
+	window.state = EntryWindow.STATE.OPEN
 
 
 func _on_enemy_destroyed(by: int) -> void:
@@ -162,13 +157,13 @@ func message_players(message: String) -> void:
 func start_wave() -> void:
 	if not is_multiplayer_authority() or _game_state == GameState.COUNTING_DOWN: return
 	_game_state = GameState.COUNTING_DOWN
-	window.open()
+	window.state = EntryWindow.STATE.OPEN
 	_wave += 1
 	for i: int in range(10, 0, -1):
 		message_players("Wave %s starting\nin %s seconds" % [_wave, i])
 		await get_tree().create_timer(1).timeout
 	message_players("They comin!")
-	window.close()
+	window.state = EntryWindow.STATE.CLOSED
 	_enemy_queue += 36
 	_game_state = GameState.THEY_COMIN
 

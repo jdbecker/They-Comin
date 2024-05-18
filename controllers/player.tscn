@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c3ffql15mo0aj"]
+[gd_scene load_steps=13 format=3 uid="uid://c3ffql15mo0aj"]
 
 [ext_resource type="Script" path="res://controllers/scripts/player.gd" id="1_um36a"]
 [ext_resource type="Material" uid="uid://c5hwva5sbrwyg" path="res://materials/player.tres" id="2_gldw4"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://nyu5bicf7y5d" path="res://ui/Inventory.tscn" id="4_60qyr"]
 [ext_resource type="PackedScene" uid="uid://bqaxnx8f8fyt" path="res://guns/gun.tscn" id="5_gj683"]
 [ext_resource type="PackedScene" uid="uid://ctkjeo8dec6on" path="res://ui/pause_menu.tscn" id="5_i31rn"]
+[ext_resource type="PackedScene" uid="uid://uhusexqry55p" path="res://ui/debug_panel.tscn" id="5_oykqv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6tj1"]
 
@@ -133,6 +134,10 @@ vertical_alignment = 1
 
 [node name="Inventory" parent="Camera3D/UI" instance=ExtResource("4_60qyr")]
 unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="DebugPanel" parent="Camera3D/UI" instance=ExtResource("5_oykqv")]
 visible = false
 layout_mode = 1
 
