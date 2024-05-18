@@ -27,6 +27,8 @@ func _ready() -> void:
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
+	
+	window.state = EntryWindow.STATE.OPEN
 
 
 func _physics_process(_delta: float) -> void:
