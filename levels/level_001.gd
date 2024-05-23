@@ -4,6 +4,7 @@ enum GameState {WAITING_FOR_PLAYERS, COUNTING_DOWN, THEY_COMIN}
 
 const PLAYER = preload("res://controllers/player.tscn")
 const ENEMY = preload("res://enemies/enemy.tscn")
+const ENTRY_WINDOW = preload("res://levels/entry_window.tscn")
 const MAX_ENEMIES := 200
 const DROP_CHANCE := 0.10
 
@@ -16,7 +17,8 @@ var _game_state: GameState = GameState.WAITING_FOR_PLAYERS
 @onready var arena_area: Area3D = $PlayerArenaArea as Area3D
 @onready var enemy_arena_area: Area3D = $EnemyArenaArea
 @onready var enemy_pathfinding_update_timer: Timer = $EnemyPathfindingUpdateTimer as Timer
-@onready var window: EntryWindow = $Window as EntryWindow
+
+var window: EntryWindow
 
 
 func _ready() -> void:
@@ -27,8 +29,6 @@ func _ready() -> void:
 	# signals are only emitted on server
 	Lobby.player_connected.connect(add_player)
 	Lobby.player_disconnected.connect(remove_player)
-	
-	window.state = EntryWindow.STATE.OPEN
 
 
 func _physics_process(_delta: float) -> void:
@@ -42,6 +42,9 @@ func add_player(id: int) -> void:
 	player.name = str(id)
 	player.position.y = 34
 	add_child(player)
+	
+	if not window:
+		_create_window()
 
 
 func spawn_enemy() -> void:
@@ -174,3 +177,10 @@ func _on_enemy_arena_area_body_exited(body: Node3D) -> void:
 		if not enemy.is_in_group("enemies"):
 			enemy.add_to_group("enemies")
 		update_enemies.call_deferred()
+
+
+func _create_window() -> void:
+	window = ENTRY_WINDOW.instantiate() as EntryWindow
+	window.position.y = 32.5
+	add_child(window)
+	window.state = EntryWindow.STATE.OPEN
