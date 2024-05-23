@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://b1yleqbb8tc7x"]
+[gd_scene load_steps=11 format=3 uid="uid://b1yleqbb8tc7x"]
 
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" path="res://levels/level_001.gd" id="1_uhsmk"]
 [ext_resource type="PackedScene" uid="uid://dim3doxntw8sx" path="res://mesh_files/gltf_exports/Environment.gltf" id="3_8fvr6"]
 [ext_resource type="Texture2D" uid="uid://bndmfxhrngnai" path="res://addons/kenney_prototype_textures/dark/texture_13.png" id="4_4ltpw"]
 [ext_resource type="Texture2D" uid="uid://bfifrw45qclr1" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="4_4wp8u"]
-[ext_resource type="PackedScene" uid="uid://d10j1cwqob44s" path="res://levels/window.tscn" id="6_60i22"]
 [ext_resource type="PackedScene" uid="uid://bgamdwpujbn1q" path="res://ui/menu.tscn" id="7_8gxd5"]
 [ext_resource type="PackedScene" uid="uid://bqds1ychuwsaf" path="res://levels/spawn_area.tscn" id="8_1irng"]
 
@@ -32,13 +31,10 @@ cast_shadow = 2
 surface_material_override/0 = SubResource("StandardMaterial3D_ue5o7")
 surface_material_override/1 = SubResource("StandardMaterial3D_wprve")
 
-[node name="Window" parent="." instance=ExtResource("6_60i22")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.5, 0)
-
 [node name="Menu" parent="." instance=ExtResource("7_8gxd5")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://controllers/player.tscn", "res://enemies/enemy.tscn")
+_spawnable_scenes = PackedStringArray("res://controllers/player.tscn", "res://enemies/enemy.tscn", "res://levels/entry_window.tscn")
 spawn_path = NodePath("..")
 
 [node name="EnemyPathfindingUpdateTimer" type="Timer" parent="."]

@@ -89,7 +89,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory") and not pause_menu.visible:
 		toggle_inventory()
 
-	if event.is_action_pressed("cheat") and Global.data.player_name == "json":
+	if event.is_action_pressed("cheat") and Global.data.player_name == "json" and name == "1":
 		toggle_debug()
 	
 	if pause_menu.visible or inventory.visible or debug_panel.visible: return
