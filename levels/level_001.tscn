@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1yleqbb8tc7x"]
+[gd_scene load_steps=12 format=3 uid="uid://b1yleqbb8tc7x"]
 
 [ext_resource type="PackedScene" uid="uid://btv0a42cgxt8g" path="res://levels/WE_test.tscn" id="1_db21n"]
 [ext_resource type="Script" path="res://levels/level_001.gd" id="1_uhsmk"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bfifrw45qclr1" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="4_4wp8u"]
 [ext_resource type="PackedScene" uid="uid://bgamdwpujbn1q" path="res://ui/menu.tscn" id="7_8gxd5"]
 [ext_resource type="PackedScene" uid="uid://bqds1ychuwsaf" path="res://levels/spawn_area.tscn" id="8_1irng"]
+[ext_resource type="PackedScene" uid="uid://bqtse7qw760c2" path="res://levels/console.tscn" id="8_xo660"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ue5o7"]
 albedo_texture = ExtResource("4_4wp8u")
@@ -332,6 +333,9 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyArenaArea"]
 shape = SubResource("BoxShape3D_6vamy")
+
+[node name="Console" parent="." instance=ExtResource("8_xo660")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4065, 33, 0.025816)
 
 [connection signal="timeout" from="EnemyPathfindingUpdateTimer" to="." method="_on_enemy_pathfinding_update_timer_timeout"]
 [connection signal="body_entered" from="PlayerArenaArea" to="." method="_on_arena_area_body_entered"]
