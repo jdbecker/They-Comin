@@ -334,8 +334,9 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EnemyArenaArea"]
 shape = SubResource("BoxShape3D_6vamy")
 
-[node name="Console" parent="." instance=ExtResource("8_xo660")]
+[node name="ConsoleScene" parent="." instance=ExtResource("8_xo660")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4065, 33, 0.025816)
+label_text = "Inventory"
 
 [connection signal="timeout" from="EnemyPathfindingUpdateTimer" to="." method="_on_enemy_pathfinding_update_timer_timeout"]
 [connection signal="body_entered" from="PlayerArenaArea" to="." method="_on_arena_area_body_entered"]

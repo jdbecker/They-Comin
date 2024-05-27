@@ -14,7 +14,7 @@ albedo_texture = ExtResource("3_xqtly")
 uv1_scale = Vector3(3, 3, 3)
 uv1_triplanar = true
 
-[node name="Console" type="Node3D"]
+[node name="ConsoleScene" type="Node3D"]
 script = ExtResource("1_7gutf")
 
 [node name="ConsoleMesh" parent="." instance=ExtResource("1_htdfq")]
@@ -23,6 +23,9 @@ script = ExtResource("1_7gutf")
 layers = 5
 surface_material_override/0 = SubResource("StandardMaterial3D_e4eit")
 surface_material_override/2 = SubResource("StandardMaterial3D_k7tfn")
+
+[node name="StaticBody3D" parent="ConsoleMesh/Console" index="0"]
+collision_layer = 5
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.971454, 0.237228, 0, -0.237228, 0.971454, 0, 1.56391, 0.110676)

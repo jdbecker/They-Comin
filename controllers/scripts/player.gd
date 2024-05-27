@@ -102,25 +102,6 @@ func _input(event: InputEvent) -> void:
 			assert(false, "Unhandled state in _input: %s" % STATE.find_key(_state))
 
 
-func _update_camera(delta: float) -> void:
-	
-	# Rotates camera using euler rotation
-	_mouse_rotation.x += _tilt_input * delta
-	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
-	_mouse_rotation.y += _rotation_input * delta
-	
-	_player_rotation = Vector3(0.0,_mouse_rotation.y,0.0)
-	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
-
-	camera.transform.basis = Basis.from_euler(_camera_rotation)
-	global_transform.basis = Basis.from_euler(_player_rotation)
-	
-	camera.rotation.z = 0.0
-
-	_rotation_input = 0.0
-	_tilt_input = 0.0
-
-
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	
@@ -162,35 +143,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func activate() -> void:
-	_state = STATE.ACTIVE
-
-
-func _set_state(value: STATE) -> void:
-	_state = value
-	
-	match _state:
-		STATE.ACTIVE:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		STATE.IN_MENU:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		_:
-			assert(false, "Unhandled state in _set_state: %s" % STATE.find_key(_state))
-
-
-func _unstuck() -> void:
-	for i in range(get_slide_collision_count()):
-		var collision: KinematicCollision3D = get_slide_collision(i)
-		if collision.get_collider() is Player or collision.get_collider() is EntryWindow:
-			var shunt_vector: Vector3 = collision.get_normal() * .01
-			position = position + shunt_vector
-
-
-func _set_kill_count(value: int) -> void:
-	kill_count = value
-	kill_count_label.text = str(value)
-
-
 @rpc("any_peer", "reliable")
 func broadcast_gun_stats() -> void:
 	if not is_node_ready():
@@ -198,18 +150,6 @@ func broadcast_gun_stats() -> void:
 	assert(Global.data.gun_in_hand, "Gun in hand is missing!")
 	var stats := Global.data.gun_in_hand
 	gun.set_gun_stats.rpc(stats.type, stats.hitscan, stats.damage, stats.rate_of_fire)
-
-
-func respawn() -> void:
-	kill_count = 0
-	velocity = Vector3.ZERO
-	_mouse_rotation = Vector3.ZERO
-	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
-	if empty_spawn_areas.is_empty():
-		empty_spawn_areas = get_tree().get_nodes_in_group("player_spawn") as Array
-	empty_spawn_areas.shuffle()
-	var spawn_area: SpawnArea = empty_spawn_areas.front() as SpawnArea
-	position = spawn_area.collision_shape_3d.global_position
 
 
 @rpc("call_local", "any_peer")
@@ -235,18 +175,51 @@ func get_gun(level: int) -> void:
 	Global.data.save_data()
 
 
+func activate() -> void:
+	_state = STATE.ACTIVE
+
+
+func respawn() -> void:
+	kill_count = 0
+	velocity = Vector3.ZERO
+	_mouse_rotation = Vector3.ZERO
+	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
+	if empty_spawn_areas.is_empty():
+		empty_spawn_areas = get_tree().get_nodes_in_group("player_spawn") as Array
+	empty_spawn_areas.shuffle()
+	var spawn_area: SpawnArea = empty_spawn_areas.front() as SpawnArea
+	position = spawn_area.collision_shape_3d.global_position
+
+
 func update_enemies_count(count: int) -> void:
 	enemies_count.text = str(count)
 
 
+func _update_camera(delta: float) -> void:
+	
+	# Rotates camera using euler rotation
+	_mouse_rotation.x += _tilt_input * delta
+	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
+	_mouse_rotation.y += _rotation_input * delta
+	
+	_player_rotation = Vector3(0.0,_mouse_rotation.y,0.0)
+	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
+
+	camera.transform.basis = Basis.from_euler(_camera_rotation)
+	global_transform.basis = Basis.from_euler(_player_rotation)
+	
+	camera.rotation.z = 0.0
+
+	_rotation_input = 0.0
+	_tilt_input = 0.0
+
+
 func _interact() -> void:
-	pass
-	#var object := reach_raycast.get_collider() as Node
-	#if object and object.is_in_group("guns"):
-		#var gun := object.duplicate() as RigidBody3D
-		#gun.freeze = true
-		#gun.transform = Transform3D.IDENTITY
-		#hand_slot.add_child(gun)
+	var object := reach_raycast.get_collider() as Node
+	if object:
+		var console := object.find_parent("ConsoleScene") as Console
+		if console:
+			_open_menu(console.ui_scene)
 
 
 func _trigger() -> void:
@@ -287,3 +260,27 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 			display_message("They got you!\n You had %s kills." % kill_count)
 			respawn()
 
+
+func _set_state(value: STATE) -> void:
+	_state = value
+	
+	match _state:
+		STATE.ACTIVE:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		STATE.IN_MENU:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		_:
+			assert(false, "Unhandled state in _set_state: %s" % STATE.find_key(_state))
+
+
+func _unstuck() -> void:
+	for i in range(get_slide_collision_count()):
+		var collision: KinematicCollision3D = get_slide_collision(i)
+		if collision.get_collider() is Player or collision.get_collider() is EntryWindow:
+			var shunt_vector: Vector3 = collision.get_normal() * .01
+			position = position + shunt_vector
+
+
+func _set_kill_count(value: int) -> void:
+	kill_count = value
+	kill_count_label.text = str(value)

@@ -13,6 +13,12 @@ func _ready() -> void:
 	redraw_inventory()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("exit"):
+		Events.menu_closed.emit()
+		queue_free()
+
+
 func redraw_inventory() -> void:
 	for child in gun_inventory_container.get_children():
 		gun_inventory_container.remove_child(child)

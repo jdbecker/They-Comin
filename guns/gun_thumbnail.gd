@@ -31,6 +31,7 @@ func _get_equipped() -> bool:
 func _on_area_2d_mouse_entered() -> void:
 	_tooltip = TOOLTIP.instantiate()
 	_tooltip.gun_stats = gun_stats
+	Events.menu_closed.connect(_tooltip.queue_free)
 	_tooltip.position_over_mouse.call_deferred()
 	get_tree().root.add_child(_tooltip)
 
