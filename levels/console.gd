@@ -6,7 +6,6 @@ extends Node3D
 @onready var label_3d: Label3D = $Label3D as Label3D
 
 
-
 func _set_label_text(value: String) -> void:
 	label_text = value
 	

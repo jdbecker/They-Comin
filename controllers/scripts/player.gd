@@ -1,31 +1,21 @@
 class_name Player
 extends CharacterBody3D
 
+enum STATE {ACTIVE, IN_MENU}
+
+const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
+const TILT_UPPER_LIMIT := deg_to_rad(90.0)
+const INVENTORY = preload("res://ui/Inventory.tscn")
+const DEBUG_PANEL = preload("res://ui/debug_panel.tscn")
+const PAUSE_MENU = preload("res://ui/pause_menu.tscn")
+
 @export var SPEED : float = 5.0
 @export var SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
 @export var JUMP_VELOCITY : float = 4.5
 @export var MOUSE_SENSITIVITY : float = 0.4
 
-@onready var enemy_overlap: Area3D = $EnemyOverlap
-@onready var camera: Camera3D = $Camera3D as Camera3D
-@onready var label: Label3D = $Label3D as Label3D
-@onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D as RayCast3D
-@onready var shoot_raycast: RayCast3D = $Camera3D/ShootRayCast3D as RayCast3D
-@onready var hand_slot: Node3D = $Camera3D/HandSlot as Node3D
-@onready var pause_menu: Control = %PauseMenu as Control
-@onready var ui: Control = $Camera3D/UI as Control
-@onready var message: Label = %Message as Label
-@onready var enemies_count: Label = %EnemiesCount as Label
-@onready var kill_count_label: Label = %KillCount as Label
-@onready var gun: Gun = $Camera3D/HandSlot/Gun
-@onready var inventory: Inventory = %Inventory
-@onready var debug_panel: DebugPanel = $Camera3D/UI/DebugPanel
-
-const TILT_LOWER_LIMIT := deg_to_rad(-90.0)
-const TILT_UPPER_LIMIT := deg_to_rad(90.0)
-
-
+var _state: STATE = STATE.ACTIVE : set = _set_state
 var _mouse_input : bool = false
 var _rotation_input : float
 var _tilt_input : float
@@ -33,6 +23,20 @@ var _mouse_rotation : Vector3
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
 var _tween: Tween
+
+@onready var enemy_overlap: Area3D = $EnemyOverlap
+@onready var camera: Camera3D = $Camera3D as Camera3D
+@onready var label: Label3D = $Label3D as Label3D
+@onready var reach_raycast: RayCast3D = $Camera3D/ReachRayCast3D as RayCast3D
+@onready var shoot_raycast: RayCast3D = $Camera3D/ShootRayCast3D as RayCast3D
+@onready var hand_slot: Node3D = $Camera3D/HandSlot as Node3D
+@onready var ui: Control = $Camera3D/UI as Control
+@onready var message: Label = %Message as Label
+@onready var enemies_count: Label = %EnemiesCount as Label
+@onready var kill_count_label: Label = %KillCount as Label
+@onready var gun: Gun = $Camera3D/HandSlot/Gun
+@onready var menu: Control = %Menu
+
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
@@ -57,6 +61,8 @@ func _ready() -> void:
 	message.modulate = Color(1, 1, 1, 0)
 	ui.show()
 	
+	Events.menu_closed.connect(activate)
+	
 	label.text = Global.data.player_name
 	label.hide()
 	
@@ -80,26 +86,20 @@ func _unhandled_input(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
-	if event.is_action_pressed("exit"):
-		if inventory.visible:
-			toggle_inventory()
-		else:
-			menu()
-	
-	if event.is_action_pressed("inventory") and not pause_menu.visible:
-		toggle_inventory()
-
-	if event.is_action_pressed("cheat") and Global.data.player_name == "json" and name == "1":
-		toggle_debug()
-	
-	if pause_menu.visible or inventory.visible or debug_panel.visible: return
-	
-	if event.is_action_pressed("interact"):
-		interact()
-	
-	if event.is_action_pressed("trigger"):
-		trigger()
-	
+	match _state:
+		STATE.ACTIVE:
+			if event.is_action_pressed("exit"):
+				_open_pause_menu()
+			if event.is_action_pressed("console") and Global.data.player_name == "json" and name == "1":
+				_open_debug()
+			if event.is_action_pressed("interact"):
+				_interact()
+			if event.is_action_pressed("trigger"):
+				_trigger()
+		STATE.IN_MENU:
+			pass
+		_:
+			assert(false, "Unhandled state in _input: %s" % STATE.find_key(_state))
 
 
 func _update_camera(delta: float) -> void:
@@ -132,7 +132,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor() and not pause_menu.visible:
+	if Input.is_action_just_pressed("jump") and is_on_floor() and _state == STATE.ACTIVE:
 		velocity.y = JUMP_VELOCITY
 	
 	# Check if stuck intersecting with something else
@@ -145,7 +145,7 @@ func _physics_process(delta: float) -> void:
 	
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
-	if direction and not pause_menu.visible:
+	if direction and _state == STATE.ACTIVE:
 		if Input.is_action_pressed("sprint") and Input.is_action_pressed("move_forward") and is_on_floor():
 			velocity.x = lerp(velocity.x, direction.x * SPEED * SPRINT_MULTI, INERTIA)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * SPRINT_MULTI, INERTIA)
@@ -160,6 +160,22 @@ func _physics_process(delta: float) -> void:
 		respawn()
 
 	move_and_slide()
+
+
+func activate() -> void:
+	_state = STATE.ACTIVE
+
+
+func _set_state(value: STATE) -> void:
+	_state = value
+	
+	match _state:
+		STATE.ACTIVE:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		STATE.IN_MENU:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		_:
+			assert(false, "Unhandled state in _set_state: %s" % STATE.find_key(_state))
 
 
 func _unstuck() -> void:
@@ -196,8 +212,16 @@ func respawn() -> void:
 	position = spawn_area.collision_shape_3d.global_position
 
 
-func update_enemies_count(count: int) -> void:
-	enemies_count.text = str(count)
+@rpc("call_local", "any_peer")
+func display_message(message_text: String) -> void:
+	message.text = message_text
+	if _tween:
+		_tween.stop()
+	_tween = get_tree().create_tween().set_process_mode(Tween.TWEEN_PROCESS_IDLE)
+	_tween.set_parallel(false)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), .5)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), 2)
+	_tween.tween_property(message, "modulate", Color(1, 1, 1, 0), 1)
 
 
 @rpc("call_local", "any_peer", "reliable")
@@ -211,7 +235,11 @@ func get_gun(level: int) -> void:
 	Global.data.save_data()
 
 
-func interact() -> void:
+func update_enemies_count(count: int) -> void:
+	enemies_count.text = str(count)
+
+
+func _interact() -> void:
 	pass
 	#var object := reach_raycast.get_collider() as Node
 	#if object and object.is_in_group("guns"):
@@ -221,53 +249,35 @@ func interact() -> void:
 		#hand_slot.add_child(gun)
 
 
-func trigger() -> void:
+func _trigger() -> void:
 	assert(gun, "Nothing in hand to trigger!")
 	if not gun.pistol_animator.is_playing():
 		gun.effects.rpc()
 		gun.trigger(shoot_raycast)
 
 
-func menu() -> void:
+func _open_pause_menu() -> void:
+	_open_menu(PAUSE_MENU)
+
+
+func _open_inventory() -> void:
+	_open_menu(INVENTORY)
+
+
+func _open_debug() -> void:
+	_open_menu(DEBUG_PANEL)
+
+
+func _open_menu(menu_scene: PackedScene) -> void:
 	if not is_multiplayer_authority(): return
-	if pause_menu.visible:
-		pause_menu.hide()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	else:
-		pause_menu.show()
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-
-func toggle_inventory() -> void:
-	if not is_multiplayer_authority(): return
-	if inventory.visible:
-		inventory.hide()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	else:
-		inventory.redraw_inventory()
-		inventory.show()
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-
-func toggle_debug() -> void:
-	if not is_multiplayer_authority(): return
-	if debug_panel.visible:
-		debug_panel.hide()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	else:
-		debug_panel.show()
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-
-func cheat_kill() -> void:
-	var enemy := get_tree().get_nodes_in_group("enemies").front() as Enemy
-	if enemy:
-		enemy.shot.rpc_id(1, gun.stats.damage)
-
-
-func _on_quit_button_pressed() -> void:
-	if not is_multiplayer_authority(): return
-	get_tree().quit()
+	
+	assert(_state != STATE.IN_MENU)
+	assert(menu.get_child_count() == 0)
+	
+	_state = STATE.IN_MENU
+	
+	var new_menu := menu_scene.instantiate()
+	menu.add_child.call_deferred(new_menu)
 
 
 func _on_enemy_overlap_body_entered(body: Node3D) -> void:
@@ -277,14 +287,3 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 			display_message("They got you!\n You had %s kills." % kill_count)
 			respawn()
 
-
-@rpc("call_local", "any_peer")
-func display_message(message_text: String) -> void:
-	message.text = message_text
-	if _tween:
-		_tween.stop()
-	_tween = get_tree().create_tween().set_process_mode(Tween.TWEEN_PROCESS_IDLE)
-	_tween.set_parallel(false)
-	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), .5)
-	_tween.tween_property(message, "modulate", Color(1, 1, 1, 1), 2)
-	_tween.tween_property(message, "modulate", Color(1, 1, 1, 0), 1)
