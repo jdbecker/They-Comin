@@ -15,6 +15,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("exit"):
+		get_viewport().set_input_as_handled()
 		Events.menu_closed.emit()
 		queue_free()
 
