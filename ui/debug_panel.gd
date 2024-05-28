@@ -8,6 +8,12 @@ func _ready() -> void:
 	Events.window_state_changed.connect(_on_window_state_changed)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("exit") or event.is_action_pressed("console"):
+		Events.menu_closed.emit()
+		queue_free()
+
+
 func _on_window_state_changed(state: EntryWindow.STATE) -> void:
 	window_opened_button.button_pressed = state == EntryWindow.STATE.OPEN
 

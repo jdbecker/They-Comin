@@ -1,14 +1,14 @@
 class_name EntryWindow
 extends Node3D
 
+enum STATE {CLOSED, OPEN}
+
 @export var state: STATE = STATE.CLOSED : set = _set_state
+
+var _tween: Tween
 
 @onready var _open_pos: Vector3 = position + (4 * Vector3.FORWARD)
 @onready var _closed_pos: Vector3 = position
-
-enum STATE {CLOSED, OPEN}
-
-var _tween: Tween
 
 
 func _ready() -> void:

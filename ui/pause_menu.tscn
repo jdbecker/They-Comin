@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://ctkjeo8dec6on"]
+[gd_scene load_steps=2 format=3 uid="uid://ctkjeo8dec6on"]
+
+[ext_resource type="Script" path="res://ui/pause_menu.gd" id="1_rtvpo"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_rtvpo")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -49,3 +52,6 @@ text = "Resume"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

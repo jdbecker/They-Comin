@@ -7,6 +7,12 @@ extends Panel
 @onready var selected_gun_stats_panel: GunStatsPanel = %SelectedGunStatsPanel as GunStatsPanel
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("exit"):
+		get_viewport().set_input_as_handled()
+		queue_free()
+
+
 func _set_gun_stats(value: GunStats) -> void:
 	selected_gun_stats = value
 	
