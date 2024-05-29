@@ -33,7 +33,7 @@ var _tween: Tween
 @onready var ui: Control = $Camera3D/UI as Control
 @onready var message: Label = %Message as Label
 @onready var enemies_count: Label = %EnemiesCount as Label
-@onready var kill_count_label: Label = %KillCount as Label
+@onready var energy_label: Label = %Energy as Label
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
 @onready var menu: Control = %Menu
 
@@ -41,7 +41,7 @@ var _tween: Tween
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
 
-var kill_count: int = 0: set = _set_kill_count
+var energy: int = 0: set = _set_energy
 
 
 func _enter_tree() -> void:
@@ -166,7 +166,7 @@ func display_message(message_text: String) -> void:
 
 @rpc("call_local", "any_peer", "reliable")
 func add_kill() -> void:
-	kill_count += 1
+	energy += 1
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -180,7 +180,7 @@ func activate() -> void:
 
 
 func respawn() -> void:
-	kill_count = 0
+	energy = 0
 	velocity = Vector3.ZERO
 	_mouse_rotation = Vector3.ZERO
 	var empty_spawn_areas: Array = get_tree().get_nodes_in_group("player_spawn").filter(func(area: SpawnArea) -> bool: return not area.has_overlapping_bodies()) as Array
@@ -257,7 +257,7 @@ func _on_enemy_overlap_body_entered(body: Node3D) -> void:
 	if body.is_in_group("enemies"):
 		var enemy := body as Enemy
 		if enemy:
-			display_message("They got you!\n You had %s kills." % kill_count)
+			display_message("They got you!\n You lost %s energy." % energy)
 			respawn()
 
 
@@ -281,6 +281,10 @@ func _unstuck() -> void:
 			position = position + shunt_vector
 
 
-func _set_kill_count(value: int) -> void:
-	kill_count = value
-	kill_count_label.text = str(value)
+func _set_energy(value: int) -> void:
+	energy = value
+	
+	if not is_node_ready():
+		await ready
+	
+	energy_label.text = str(value)
