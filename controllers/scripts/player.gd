@@ -35,6 +35,7 @@ var _tween: Tween
 @onready var enemies_count: Label = %EnemiesCount as Label
 @onready var energy_label: Label = %Energy as Label
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
+@onready var interact_prompt: HBoxContainer = %InteractPrompt
 @onready var menu: Control = %Menu
 
 
@@ -65,6 +66,8 @@ func _ready() -> void:
 	
 	label.text = Global.data.player_name
 	label.hide()
+	
+	interact_prompt.hide()
 	
 	broadcast_gun_stats()
 	Events.equipped_gun_changed.connect(broadcast_gun_stats)
@@ -107,6 +110,8 @@ func _physics_process(delta: float) -> void:
 	
 	# Update camera movement based on mouse movement
 	_update_camera(delta)
+	
+	_display_interact_prompt()
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -212,6 +217,14 @@ func _update_camera(delta: float) -> void:
 
 	_rotation_input = 0.0
 	_tilt_input = 0.0
+
+
+func _display_interact_prompt() -> void:
+	var object := reach_raycast.get_collider() as Node
+	if object:
+		interact_prompt.show()
+	else:
+		interact_prompt.hide()
 
 
 func _interact() -> void:
