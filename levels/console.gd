@@ -5,6 +5,8 @@ extends Node3D
 @export var ui_scene: PackedScene = preload("res://ui/Inventory.tscn")
 
 @onready var label_3d: Label3D = $Label3D as Label3D
+@onready var console_on_audio: AudioStreamPlayer = $ConsoleOnAudio
+@onready var console_off_audio: AudioStreamPlayer = $ConsoleOffAudio
 
 
 func _set_label_text(value: String) -> void:
