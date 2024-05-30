@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4vcbf4dxet32"]
+
+[ext_resource type="Script" path="res://ui/scrap_ui.gd" id="1_4yfvl"]
+[ext_resource type="Texture2D" uid="uid://bbuav3xj2m8tl" path="res://textures/Scrap.png" id="1_tqghp"]
+
+[node name="ScrapUI" type="HBoxContainer"]
+theme_override_constants/separation = 8
+script = ExtResource("1_4yfvl")
+
+[node name="Scrap" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "99"
+
+[node name="ScrapIcon" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_tqghp")
