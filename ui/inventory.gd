@@ -1,5 +1,5 @@
 class_name Inventory
-extends PanelContainer
+extends Control
 
 const GUN_THUMBNAIL = preload("res://guns/gun_thumbnail.tscn")
 

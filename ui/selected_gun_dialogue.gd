@@ -28,8 +28,11 @@ func _on_cancel_button_pressed() -> void:
 
 
 func _on_scrap_button_pressed() -> void:
+	Global.data.scrap += selected_gun_stats.damage
 	Global.data.guns_in_inventory.erase(selected_gun_stats)
 	Events.inventory_changed.emit()
+	Events.scrap_changed.emit()
+	
 	Global.data.save_data()
 	queue_free()
 

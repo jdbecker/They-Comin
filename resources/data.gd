@@ -4,6 +4,7 @@ extends Resource
 const FILE_LOCATION := "user://savedata.tres"
 
 @export var player_name : String
+@export var scrap : int = 0
 @export var gun_in_hand : GunStats : get = _get_gun_in_hand
 @export var guns_in_inventory : Array[GunStats] : get = _get_guns_in_inventory
 
