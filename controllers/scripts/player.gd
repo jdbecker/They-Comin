@@ -232,7 +232,8 @@ func _interact() -> void:
 	if object:
 		var console := object.find_parent("ConsoleScene") as Console
 		if console:
-			_open_menu(console.ui_scene)
+			console.console_on_audio.play()
+			_open_menu(console.ui_scene, console.console_off_audio)
 
 
 func _trigger() -> void:
@@ -246,15 +247,11 @@ func _open_pause_menu() -> void:
 	_open_menu(PAUSE_MENU)
 
 
-func _open_inventory() -> void:
-	_open_menu(INVENTORY)
-
-
 func _open_debug() -> void:
 	_open_menu(DEBUG_PANEL)
 
 
-func _open_menu(menu_scene: PackedScene) -> void:
+func _open_menu(menu_scene: PackedScene, close_sound: AudioStreamPlayer = AudioStreamPlayer.new()) -> void:
 	if not is_multiplayer_authority(): return
 	
 	assert(_state != STATE.IN_MENU)
@@ -263,6 +260,7 @@ func _open_menu(menu_scene: PackedScene) -> void:
 	_state = STATE.IN_MENU
 	
 	var new_menu := menu_scene.instantiate()
+	new_menu.tree_exiting.connect(close_sound.play)
 	menu.add_child.call_deferred(new_menu)
 
 

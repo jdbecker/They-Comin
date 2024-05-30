@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqtse7qw760c2"]
+[gd_scene load_steps=9 format=3 uid="uid://bqtse7qw760c2"]
 
 [ext_resource type="Script" path="res://levels/console.gd" id="1_7gutf"]
 [ext_resource type="PackedScene" uid="uid://fg320iqudy6d" path="res://mesh_files/gltf_exports/console.gltf" id="1_htdfq"]
 [ext_resource type="Texture2D" uid="uid://h6ilt8xidl60" path="res://addons/kenney_prototype_textures/dark/texture_01.png" id="2_2tbol"]
 [ext_resource type="Texture2D" uid="uid://cq7yq6xh5qxsi" path="res://addons/kenney_prototype_textures/light/texture_06.png" id="3_xqtly"]
+[ext_resource type="AudioStream" uid="uid://dkdfuu64miu3k" path="res://assets/console_on.mp3" id="5_kucgg"]
+[ext_resource type="AudioStream" uid="uid://b6yriagcvas25" path="res://assets/console_off.mp3" id="6_hc6v7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e4eit"]
 albedo_texture = ExtResource("2_2tbol")
@@ -31,5 +33,13 @@ collision_layer = 5
 transform = Transform3D(1, 0, 0, 0, 0.971454, 0.237228, 0, -0.237228, 0.971454, 0, 1.56391, 0.110676)
 text = "Console
 Console"
+
+[node name="ConsoleOnAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_kucgg")
+volume_db = -10.0
+
+[node name="ConsoleOffAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_hc6v7")
+volume_db = -10.0
 
 [editable path="ConsoleMesh"]
