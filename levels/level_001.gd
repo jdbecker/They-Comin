@@ -112,9 +112,7 @@ func reset() -> void:
 func _on_enemy_destroyed(by: int) -> void:
 	var player := get_tree().get_nodes_in_group("players").filter(func(this: Player) -> bool: return this.name == str(by)).front() as Player
 	if player:
-		player.add_kill.rpc_id(by)
-		if randf() < DROP_CHANCE:
-			player.get_gun.rpc_id(by, _wave)
+		player.add_kill.rpc_id(by, _wave)
 
 
 func update_enemies() -> void:
