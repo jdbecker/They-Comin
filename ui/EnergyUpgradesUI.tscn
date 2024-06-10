@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnlqkl0wlec7n"]
+
+[ext_resource type="PackedScene" uid="uid://67jfaewhvtaj" path="res://ui/EnergyUpgradeButton.tscn" id="1_5tkno"]
+[ext_resource type="Script" path="res://ui/energy_upgrades_ui.gd" id="1_uirbl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oc2o6"]
+bg_color = Color(0.172549, 0.172549, 0.172549, 1)
+
+[node name="EnergyUpgradesUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uirbl")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oc2o6")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 2
+
+[node name="RunSpeedUpgradeButton" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_5tkno")]
+unique_name_in_owner = true
+layout_mode = 2
+cost = 30
+
+[node name="DamageUpgradeButton" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_5tkno")]
+unique_name_in_owner = true
+layout_mode = 2
+cost = 30
+
+[node name="HealthUpgradeButton" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_5tkno")]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+cost = 30
+
+[node name="DropRateUpgradeButton" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_5tkno")]
+unique_name_in_owner = true
+layout_mode = 2
+cost = 30
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/GridContainer/RunSpeedUpgradeButton" to="." method="_on_run_speed_upgrade_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/GridContainer/DamageUpgradeButton" to="." method="_on_damage_upgrade_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/GridContainer/HealthUpgradeButton" to="." method="_on_health_upgrade_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/GridContainer/DropRateUpgradeButton" to="." method="_on_drop_rate_upgrade_button_pressed"]

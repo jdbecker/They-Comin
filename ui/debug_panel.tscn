@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://uhusexqry55p"]
+[gd_scene load_steps=3 format=3 uid="uid://uhusexqry55p"]
 
 [ext_resource type="Script" path="res://ui/debug_panel.gd" id="1_dbee8"]
+[ext_resource type="Texture2D" uid="uid://7e6cit6ya4ti" path="res://textures/lightning.png" id="2_iki13"]
 
 [node name="DebugPanel" type="Control"]
 layout_mode = 3
@@ -45,4 +46,17 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Add Energy"
+
+[node name="AddEnergyButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 2
+icon = ExtResource("2_iki13")
+
 [connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/WindowOpenedButton" to="." method="_on_window_opened_button_toggled"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/AddEnergyButton" to="." method="_on_add_energy_button_pressed"]

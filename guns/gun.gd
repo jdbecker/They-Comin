@@ -8,11 +8,11 @@ extends Node
 @onready var gun_sound_player: AudioStreamPlayer3D = $GunSoundPlayer as AudioStreamPlayer3D
 
 
-func trigger(ray_cast_3d: RayCast3D) -> void:
+func trigger(ray_cast_3d: RayCast3D, damage_multi: float) -> void:
 	if ray_cast_3d.is_colliding():
 		var enemy: Enemy = ray_cast_3d.get_collider() as Enemy
 		if enemy:
-			enemy.shot.rpc_id(1, stats.damage)
+			enemy.shot.rpc_id(1, stats.damage * damage_multi)
 
 
 @rpc("call_local")

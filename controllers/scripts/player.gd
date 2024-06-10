@@ -9,11 +9,35 @@ const INVENTORY = preload("res://ui/Inventory.tscn")
 const DEBUG_PANEL = preload("res://ui/debug_panel.tscn")
 const PAUSE_MENU = preload("res://ui/pause_menu.tscn")
 
+const RUN_SPEED_LEVEL_INCREASE := 0.5
+const DAMAGE_LEVEL_INCREASE := 0.2
+const DROP_RATE_INCREASE := 0.1
+
 @export var SPEED : float = 5.0
-@export var SPRINT_MULTI : float = 2.0
+@export var BASE_SPRINT_MULTI : float = 2.0
 @export_range(0.0, 1.0) var INERTIA : float = 0.2
 @export var JUMP_VELOCITY : float = 4.5
-@export var MOUSE_SENSITIVITY : float = 0.4
+@export var MOUSE_SENSITIVITY : float = 0.3
+
+var run_speed_upgrade_level := 0
+var damage_upgrade_level := 0
+var health_upgrade_level := 0
+var drop_rate_upgrade_level := 0
+
+var adjusted_run_speed_multi: float:
+	get:
+		return BASE_SPRINT_MULTI + (RUN_SPEED_LEVEL_INCREASE * run_speed_upgrade_level)
+
+var damage_multi: float:
+	get:
+		return 1.0 + (DAMAGE_LEVEL_INCREASE * damage_upgrade_level)
+
+var drop_rate: float:
+	get:
+		return 1.0 - ((1.0 - DROP_RATE_INCREASE) ** (1.0 + drop_rate_upgrade_level))
+
+var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
+var energy: int = 0: set = _set_energy
 
 var _state: STATE = STATE.ACTIVE : set = _set_state
 var _mouse_input : bool = false
@@ -37,12 +61,6 @@ var _tween: Tween
 @onready var gun: Gun = $Camera3D/HandSlot/Gun
 @onready var interact_prompt: HBoxContainer = %InteractPrompt
 @onready var menu: Control = %Menu
-
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
-
-var energy: int = 0: set = _set_energy
 
 
 func _enter_tree() -> void:
@@ -133,8 +151,11 @@ func _physics_process(delta: float) -> void:
 	
 	if direction and _state == STATE.ACTIVE:
 		if Input.is_action_pressed("sprint") and Input.is_action_pressed("move_forward") and is_on_floor():
-			velocity.x = lerp(velocity.x, direction.x * SPEED * SPRINT_MULTI, INERTIA)
-			velocity.z = lerp(velocity.z, direction.z * SPEED * SPRINT_MULTI, INERTIA)
+			velocity.x = lerp(velocity.x, direction.x * SPEED * adjusted_run_speed_multi, INERTIA)
+			velocity.z = lerp(velocity.z, direction.z * SPEED * adjusted_run_speed_multi, INERTIA)
+		elif not is_on_floor():
+			velocity.x = lerp(velocity.x, direction.x * SPEED, INERTIA * 0.1)
+			velocity.z = lerp(velocity.z, direction.z * SPEED, INERTIA * 0.1)
 		else:
 			velocity.x = lerp(velocity.x, direction.x * SPEED, INERTIA)
 			velocity.z = lerp(velocity.z, direction.z * SPEED, INERTIA)
@@ -170,8 +191,10 @@ func display_message(message_text: String) -> void:
 
 
 @rpc("call_local", "any_peer", "reliable")
-func add_kill() -> void:
+func add_kill(level: int) -> void:
 	energy += 1
+	if randf() < drop_rate:
+		get_gun(level)
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -230,7 +253,7 @@ func _display_interact_prompt() -> void:
 func _interact() -> void:
 	var object := reach_raycast.get_collider() as Node
 	if object:
-		var console := object.find_parent("ConsoleScene") as Console
+		var console := object.find_parent("ConsoleMesh").get_parent() as Console
 		if console:
 			console.console_on_audio.play()
 			_open_menu(console.ui_scene, console.console_off_audio)
@@ -240,7 +263,7 @@ func _trigger() -> void:
 	assert(gun, "Nothing in hand to trigger!")
 	if not gun.pistol_animator.is_playing():
 		gun.effects.rpc()
-		gun.trigger(shoot_raycast)
+		gun.trigger(shoot_raycast, damage_multi)
 
 
 func _open_pause_menu() -> void:

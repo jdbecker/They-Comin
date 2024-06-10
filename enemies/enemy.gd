@@ -4,8 +4,8 @@ extends CharacterBody3D
 signal destroyed(by: int)
 
 @export var logging: bool = false
-@export var max_hp: int = 2 : set = _set_max_hp
-@export var current_hp: int = max_hp : set = _setcurrent_hp
+@export var max_hp: float = 2.0 : set = _set_max_hp
+@export var current_hp: float = max_hp : set = _setcurrent_hp
 @export var speed := 5.0
 @export var hover_height := 0
 
@@ -80,7 +80,7 @@ func distance_to(target: Vector3) -> float:
 
 
 @rpc("any_peer", "call_local", "reliable")
-func shot(damage: int) -> void:
+func shot(damage: float) -> void:
 	current_hp -= damage
 	if current_hp <= 0 and is_in_group("enemies"):
 		destroyed.emit(multiplayer.get_remote_sender_id())
@@ -98,7 +98,7 @@ func destroy_effect() -> void:
 	death_sound_player.play()
 
 
-func _set_max_hp(value: int) -> void:
+func _set_max_hp(value: float) -> void:
 	if not is_node_ready():
 		await ready
 	max_hp = value
@@ -107,7 +107,7 @@ func _set_max_hp(value: int) -> void:
 	enemy_hp_bar.value = max_hp
 
 
-func _setcurrent_hp(value: int) -> void:
+func _setcurrent_hp(value: float) -> void:
 	if not is_node_ready():
 		await ready
 	current_hp = value
